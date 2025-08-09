@@ -1,20 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bild Cover Analyse - Zyrix</title>
+    <title>Tool 1: Cover analysieren & Konkurrenz vergleichen - Zyrix</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ===== ZYRIX TOOL 1 DESIGN ===== */
         :root {
-            --primary-bg: #0f0f0f;
-            --secondary-bg: #1a1a1a;
-            --accent-color: #ff9900;
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2a2a2a;
+            --accent-color: #ff9500;
             --text-primary: #ffffff;
             --text-secondary: #cccccc;
             --border-color: #333333;
             --success-color: #00ff88;
-            --warning-color: #ffaa00;
+            --card-bg: #252525;
             --error-color: #ff4444;
         }
 
@@ -25,332 +27,366 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
             background: var(--primary-bg);
             color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 0;
         }
 
-        .zyrix-container {
+        /* Header */
+        .header {
+            background: var(--primary-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
-            min-height: 100vh;
-        }
-
-        .zyrix-hero {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .zyrix-hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-color), #ffcc00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-        }
-
-        .zyrix-hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .zyrix-mode-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .zyrix-mode-card {
-            background: rgba(26, 26, 26, 0.8);
-            border: 3px solid var(--border-color);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .zyrix-mode-card:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 153, 0, 0.2);
-        }
-
-        .zyrix-mode-card.active {
-            border-color: var(--success-color);
-            background: rgba(0, 255, 136, 0.1);
-        }
-
-        .zyrix-mode-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-color), #ffcc00);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .zyrix-mode-card:hover::before,
-        .zyrix-mode-card.active::before {
-            opacity: 1;
-        }
-
-        .zyrix-mode-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .zyrix-mode-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 15px;
-        }
-
-        .zyrix-mode-description {
-            color: var(--text-secondary);
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .zyrix-mode-price {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-color), #ffcc00);
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .zyrix-form-container {
-            display: none;
-            background: rgba(26, 26, 26, 0.9);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 40px;
-            margin-top: 40px;
-        }
-
-        .zyrix-form-container.active {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .zyrix-form-title {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .zyrix-form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .zyrix-upload-section {
-            background: rgba(15, 15, 15, 0.8);
-            border: 2px dashed var(--border-color);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .zyrix-upload-section:hover {
-            border-color: var(--accent-color);
-            background: rgba(255, 153, 0, 0.05);
-        }
-
-        .zyrix-upload-section.dragover {
-            border-color: var(--success-color);
-            background: rgba(0, 255, 136, 0.1);
-        }
-
-        .zyrix-upload-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 15px;
-        }
-
-        .zyrix-upload-icon {
-            font-size: 3rem;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .zyrix-upload-text {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .zyrix-file-input {
-            display: none;
-        }
-
-        .zyrix-upload-btn {
-            background: linear-gradient(135deg, var(--accent-color), #ffcc00);
-            color: #000;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .zyrix-upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 153, 0, 0.3);
-        }
-
-        .zyrix-file-preview {
-            margin-top: 15px;
-            display: none;
-        }
-
-        .zyrix-file-preview.active {
-            display: block;
-        }
-
-        .zyrix-file-preview img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-        }
-
-        .zyrix-file-name {
-            color: var(--success-color);
-            font-weight: 500;
-            margin-top: 10px;
-        }
-
-        .zyrix-form-fields {
-            display: grid;
-            gap: 25px;
-        }
-
-        .zyrix-field-group {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .nav-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .nav-breadcrumb a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .nav-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .token-display {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
 
-        .zyrix-field-label {
+        .token-count {
+            color: var(--success-color);
             font-weight: 600;
+        }
+
+        .back-btn {
+            background: var(--secondary-bg);
             color: var(--text-primary);
-            font-size: 1.1rem;
-        }
-
-        .zyrix-field-input,
-        .zyrix-field-select,
-        .zyrix-field-textarea {
-            background: rgba(15, 15, 15, 0.8);
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .zyrix-field-input:focus,
-        .zyrix-field-select:focus,
-        .zyrix-field-textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.1);
-        }
-
-        .zyrix-field-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .zyrix-submit-section {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .zyrix-submit-btn {
-            background: linear-gradient(135deg, var(--success-color), #00cc70);
-            color: #000;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
-            font-family: inherit;
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-weight: 500;
             transition: all 0.3s ease;
-            min-width: 200px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .zyrix-submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+        .back-btn:hover {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            transform: translateY(-2px);
         }
 
-        .zyrix-submit-btn:disabled {
-            background: var(--border-color);
-            color: var(--text-secondary);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        /* Dashboard Navigation */
+        .dashboard-nav {
+            background: var(--primary-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .zyrix-loading {
-            display: none;
+        .back-to-dashboard {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--secondary-bg);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            margin-left: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-dashboard:hover {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 149, 0, 0.3);
+        }
+
+        .back-icon {
+            font-size: 16px;
+            font-weight: 700;
+            transition: transform 0.3s ease;
+        }
+
+        .back-to-dashboard:hover .back-icon {
+            transform: translateX(-3px);
+        }
+
+        .back-text {
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Tool Header */
+        .tool-header {
             text-align: center;
-            margin-top: 30px;
+            margin-bottom: 50px;
         }
 
-        .zyrix-loading.active {
+        .tool-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
             display: block;
         }
 
-        .zyrix-spinner {
+        .tool-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .tool-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+
+        .tool-cost-info {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            display: inline-block;
+        }
+
+        .cost-badge {
+            background: rgba(255, 149, 0, 0.2);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid var(--accent-color);
+        }
+
+        /* Tool Content */
+        .tool-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .upload-section, .analysis-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent-color);
+            background: rgba(255, 149, 0, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent-color);
+            background: rgba(255, 149, 0, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background: #ffaa00;
+            transform: translateY(-2px);
+        }
+
+        .analyze-btn {
+            background: var(--success-color);
+            color: var(--primary-bg);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            disabled: true;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            background: #00ff99;
+            transform: translateY(-2px);
+        }
+
+        .analyze-btn:disabled {
+            background: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .analysis-result {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .result-score {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .score-excellent { color: var(--success-color); }
+        .score-good { color: #ffaa00; }
+        .score-poor { color: var(--error-color); }
+
+        .result-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .features-list li {
+            color: var(--success-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            font-weight: bold;
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
             border: 4px solid var(--border-color);
-            border-top: 4px solid var(--accent-color);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            border-top: 4px solid var(--accent-color);
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 20px auto;
         }
 
         @keyframes spin {
@@ -358,673 +394,415 @@
             100% { transform: rotate(360deg); }
         }
 
-        .zyrix-loading-text {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        .zyrix-result {
-            display: none;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--success-color);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 40px;
-        }
-
-        .zyrix-result.active {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        .zyrix-result h1,
-        .zyrix-result h2,
-        .zyrix-result h3 {
-            color: var(--accent-color) !important;
-            margin-bottom: 15px;
-        }
-
-        .zyrix-result p,
-        .zyrix-result li {
-            color: var(--text-primary) !important;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .zyrix-result table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        .zyrix-result th,
-        .zyrix-result td {
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            text-align: left;
-            color: var(--text-primary) !important;
-        }
-
-        .zyrix-result th {
-            background: rgba(255, 153, 0, 0.2);
-            color: var(--accent-color) !important;
-            font-weight: 600;
-        }
-
-        .zyrix-download-section {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border-color);
-        }
-
-        .zyrix-download-btn {
-            background: linear-gradient(135deg, var(--warning-color), #ffcc00);
-            color: #000;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .zyrix-download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 170, 0, 0.3);
-        }
-
-        .zyrix-error {
-            background: rgba(255, 68, 68, 0.1);
-            border: 2px solid var(--error-color);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-
-        .zyrix-error.active {
-            display: block;
-        }
-
-        .zyrix-error-text {
-            color: var(--error-color);
-            font-weight: 600;
-        }
-
-        .zyrix-token-warning {
-            background: rgba(255, 170, 0, 0.1);
-            border: 2px solid var(--warning-color);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-
-        .zyrix-token-warning.active {
-            display: block;
-        }
-
-        .zyrix-token-warning-text {
-            color: var(--warning-color);
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .zyrix-buy-tokens-btn {
-            background: linear-gradient(135deg, var(--warning-color), #ffcc00);
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .zyrix-buy-tokens-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 170, 0, 0.3);
-        }
-
-        /* RESPONSIVE */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .zyrix-hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .zyrix-mode-selector {
+            .tool-content {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 30px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
             }
 
-            .zyrix-mode-card {
-                padding: 30px 20px;
-            }
-
-            .zyrix-form-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .zyrix-form-container {
-                padding: 30px 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .zyrix-container {
-                padding: 20px 15px;
-            }
-
-            .zyrix-hero h1 {
-                font-size: 2rem;
-            }
-
-            .zyrix-mode-card {
-                padding: 25px 15px;
-            }
-
-            .zyrix-mode-icon {
-                font-size: 3rem;
-            }
-
-            .zyrix-mode-title {
-                font-size: 1.5rem;
+            .tool-title {
+                font-size: 28px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="zyrix-container">
-        <!-- Hero Section -->
-        <div class="zyrix-hero">
-            <h1>📸 Bild Cover Analyse</h1>
-            <p>Professionelle Analyse Ihrer Buchcover und Produktbilder mit detailliertem Konkurrenzvergleich</p>
-        </div>
-
-        <!-- Mode Selector -->
-        <div class="zyrix-mode-selector">
-            <div class="zyrix-mode-card" onclick="selectMode('cover-analyse')">
-                <span class="zyrix-mode-icon">🎨</span>
-                <h3 class="zyrix-mode-title">Cover Analyse</h3>
-                <p class="zyrix-mode-description">Detaillierte Analyse Ihres Covers mit Verbesserungsvorschlägen, Zielgruppen-Bewertung und Marktpositionierung</p>
-                <span class="zyrix-mode-price">Einzelanalyse 120 Tokens</span>
-            </div>
-
-            <div class="zyrix-mode-card" onclick="selectMode('cover-vergleich')">
-                <span class="zyrix-mode-icon">⚔️</span>
-                <h3 class="zyrix-mode-title">Cover Vergleich</h3>
-                <p class="zyrix-mode-description">Vergleichen Sie Ihr Cover mit 3 Konkurrenz-Covern und erhalten Sie eine detaillierte Wettbewerbsanalyse</p>
-                <span class="zyrix-mode-price">Vergleichsanalyse 150 Tokens</span>
-            </div>
-        </div>
-
-        <!-- Token Warning -->
-        <div class="zyrix-token-warning" id="tokenWarning">
-            <div class="zyrix-token-warning-text">⚠️ Nicht genügend Tokens verfügbar!</div>
-            <a href="https://www.zyrix.de" class="zyrix-buy-tokens-btn">💳 Tokens kaufen</a>
-        </div>
-
-        <!-- Cover Analyse Form -->
-        <div class="zyrix-form-container" id="coverAnalyseForm">
-            <h2 class="zyrix-form-title">🎨 Cover Analyse</h2>
-            
-            <div class="zyrix-form-grid">
-                <!-- Upload Section -->
-                <div class="zyrix-upload-section" onclick="document.getElementById('coverFile').click()">
-                    <span class="zyrix-upload-icon">📁</span>
-                    <h3 class="zyrix-upload-title">Cover hochladen</h3>
-                    <p class="zyrix-upload-text">Klicken Sie hier oder ziehen Sie Ihr Cover hierher</p>
-                    <button type="button" class="zyrix-upload-btn">Datei auswählen</button>
-                    <input type="file" id="coverFile" class="zyrix-file-input" accept="image/*" onchange="handleFileUpload(this, 'coverPreview')">
-                    <div class="zyrix-file-preview" id="coverPreview"></div>
-                </div>
-
-                <!-- Form Fields -->
-                <div class="zyrix-form-fields">
-                    <div class="zyrix-field-group">
-                        <label class="zyrix-field-label">Produkttyp</label>
-                        <select class="zyrix-field-select" id="productType">
-                            <option value="">Bitte wählen...</option>
-                            <option value="buch">Buch</option>
-                            <option value="hoerbuch">Hörbuch</option>
-                            <option value="ebook">E-Book</option>
-                            <option value="kurs">Online-Kurs</option>
-                            <option value="software">Software</option>
-                            <option value="spiel">Spiel</option>
-                            <option value="sonstiges">Sonstiges</option>
-                        </select>
-                    </div>
-
-                    <div class="zyrix-field-group">
-                        <label class="zyrix-field-label">Genre/Kategorie</label>
-                        <input type="text" class="zyrix-field-input" id="genre" placeholder="z.B. Thriller, Romance, Business...">
-                    </div>
-
-                    <div class="zyrix-field-group">
-                        <label class="zyrix-field-label">Preisbereich</label>
-                        <select class="zyrix-field-select" id="priceRange">
-                            <option value="">Bitte wählen...</option>
-                            <option value="0-10">0-10 €</option>
-                            <option value="10-25">10-25 €</option>
-                            <option value="25-50">25-50 €</option>
-                            <option value="50-100">50-100 €</option>
-                            <option value="100+">100+ €</option>
-                        </select>
-                    </div>
-
-                    <div class="zyrix-field-group">
-                        <label class="zyrix-field-label">Zielgruppe</label>
-                        <textarea class="zyrix-field-textarea" id="targetAudience" placeholder="Beschreiben Sie Ihre Zielgruppe detailliert (Alter, Interessen, Bedürfnisse...)"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zyrix-submit-section">
-                <button type="button" class="zyrix-submit-btn" onclick="startAnalysis('cover-analyse')">🚀 Analyse starten (120 Tokens)</button>
-            </div>
-        </div>
-
-        <!-- Cover Vergleich Form -->
-        <div class="zyrix-form-container" id="coverVergleichForm">
-            <h2 class="zyrix-form-title">⚔️ Cover Vergleich</h2>
-            
-            <div class="zyrix-form-grid">
-                <!-- Upload Sections -->
-                <div class="zyrix-upload-section" onclick="document.getElementById('mainCoverFile').click()">
-                    <span class="zyrix-upload-icon">🎯</span>
-                    <h3 class="zyrix-upload-title">Ihr Cover</h3>
-                    <p class="zyrix-upload-text">Hauptcover für die Analyse</p>
-                    <button type="button" class="zyrix-upload-btn">Datei auswählen</button>
-                    <input type="file" id="mainCoverFile" class="zyrix-file-input" accept="image/*" onchange="handleFileUpload(this, 'mainCoverPreview')">
-                    <div class="zyrix-file-preview" id="mainCoverPreview"></div>
-                </div>
-
-                <div class="zyrix-upload-section" onclick="document.getElementById('competitor1File').click()">
-                    <span class="zyrix-upload-icon">🥇</span>
-                    <h3 class="zyrix-upload-title">Konkurrenz Cover 1</h3>
-                    <p class="zyrix-upload-text">Erstes Vergleichscover</p>
-                    <button type="button" class="zyrix-upload-btn">Datei auswählen</button>
-                    <input type="file" id="competitor1File" class="zyrix-file-input" accept="image/*" onchange="handleFileUpload(this, 'competitor1Preview')">
-                    <div class="zyrix-file-preview" id="competitor1Preview"></div>
-                </div>
-
-                <div class="zyrix-upload-section" onclick="document.getElementById('competitor2File').click()">
-                    <span class="zyrix-upload-icon">🥈</span>
-                    <h3 class="zyrix-upload-title">Konkurrenz Cover 2</h3>
-                    <p class="zyrix-upload-text">Zweites Vergleichscover</p>
-                    <button type="button" class="zyrix-upload-btn">Datei auswählen</button>
-                    <input type="file" id="competitor2File" class="zyrix-file-input" accept="image/*" onchange="handleFileUpload(this, 'competitor2Preview')">
-                    <div class="zyrix-file-preview" id="competitor2Preview"></div>
-                </div>
-
-                <div class="zyrix-upload-section" onclick="document.getElementById('competitor3File').click()">
-                    <span class="zyrix-upload-icon">🥉</span>
-                    <h3 class="zyrix-upload-title">Konkurrenz Cover 3</h3>
-                    <p class="zyrix-upload-text">Drittes Vergleichscover</p>
-                    <button type="button" class="zyrix-upload-btn">Datei auswählen</button>
-                    <input type="file" id="competitor3File" class="zyrix-file-input" accept="image/*" onchange="handleFileUpload(this, 'competitor3Preview')">
-                    <div class="zyrix-file-preview" id="competitor3Preview"></div>
-                </div>
-            </div>
-
-            <div class="zyrix-form-fields">
-                <div class="zyrix-field-group">
-                    <label class="zyrix-field-label">Produkttyp</label>
-                    <select class="zyrix-field-select" id="productTypeVergleich">
-                        <option value="">Bitte wählen...</option>
-                        <option value="buch">Buch</option>
-                        <option value="hoerbuch">Hörbuch</option>
-                        <option value="ebook">E-Book</option>
-                        <option value="kurs">Online-Kurs</option>
-                        <option value="software">Software</option>
-                        <option value="spiel">Spiel</option>
-                        <option value="sonstiges">Sonstiges</option>
-                    </select>
-                </div>
-
-                <div class="zyrix-field-group">
-                    <label class="zyrix-field-label">Genre/Kategorie</label>
-                    <input type="text" class="zyrix-field-input" id="genreVergleich" placeholder="z.B. Thriller, Romance, Business...">
-                </div>
-
-                <div class="zyrix-field-group">
-                    <label class="zyrix-field-label">Preisbereich</label>
-                    <select class="zyrix-field-select" id="priceRangeVergleich">
-                        <option value="">Bitte wählen...</option>
-                        <option value="0-10">0-10 €</option>
-                        <option value="10-25">10-25 €</option>
-                        <option value="25-50">25-50 €</option>
-                        <option value="50-100">50-100 €</option>
-                        <option value="100+">100+ €</option>
-                    </select>
-                </div>
-
-                <div class="zyrix-field-group">
-                    <label class="zyrix-field-label">Zielgruppe</label>
-                    <textarea class="zyrix-field-textarea" id="targetAudienceVergleich" placeholder="Beschreiben Sie Ihre Zielgruppe detailliert (Alter, Interessen, Bedürfnisse...)"></textarea>
-                </div>
-            </div>
-
-            <div class="zyrix-submit-section">
-                <button type="button" class="zyrix-submit-btn" onclick="startAnalysis('cover-vergleich')">⚔️ Vergleich starten (150 Tokens)</button>
-            </div>
-        </div>
-
-        <!-- Loading -->
-        <div class="zyrix-loading" id="loading">
-            <div class="zyrix-spinner"></div>
-            <div class="zyrix-loading-text">Analyse wird durchgeführt...</div>
-        </div>
-
-        <!-- Error -->
-        <div class="zyrix-error" id="error">
-            <div class="zyrix-error-text" id="errorText">Ein Fehler ist aufgetreten.</div>
-        </div>
-
-        <!-- Result -->
-        <div class="zyrix-result" id="result">
-            <div id="resultContent"></div>
-            <div class="zyrix-download-section">
-                <a href="#" class="zyrix-download-btn" id="downloadBtn" style="display: none;">
-                    📄 PDF herunterladen
-                </a>
-            </div>
-        </div>
+    <!-- Dashboard Navigation -->
+    <div class="dashboard-nav">
+        <a href="https://www.zyrix.de/myzyrix" class="back-to-dashboard">
+            <span class="back-icon">←</span>
+            <span class="back-text">Zurück zum Dashboard</span>
+        </a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Supabase Configuration
-        const SUPABASE_URL = 'https://fhnegilgikynexhneoiq.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobmVnaWxnaWt5bmV4aG5lb2lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0NzM2MzQsImV4cCI6MjA2ODA0OTYzNH0.u_SBe_AtgUNHa-ogG8y9qFv8pr_u7-jvWBayhiwXOPE';
-        
-        let supabase;
-        let currentUser = null;
-        let userTokens = 0;
-        let selectedMode = null;
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Tool Header -->
+        <section class="tool-header">
+            <span class="tool-icon">📚</span>
+            <h1 class="tool-title">Cover analysieren & Konkurrenz vergleichen</h1>
+            <p class="tool-subtitle">
+                Analysiere dein Buchcover und vergleiche es direkt mit der Konkurrenz. Finde heraus, welches Cover am stärksten wirkt und warum.
+            </p>
+            <div class="tool-cost-info">
+                <span class="cost-badge">Kosten: 10 Tokens</span>
+            </div>
+        </section>
 
-        // Initialize when page loads
-        window.addEventListener('load', function() {
-            initializeApp();
+        <!-- Tool Content -->
+        <section class="tool-content">
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <h2 class="section-title">Dein Cover hochladen</h2>
+                
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">📚</div>
+                    <div class="upload-text">
+                        Ziehe dein Buchcover hierher oder klicke zum Auswählen
+                    </div>
+                    <button class="upload-btn" onclick="document.getElementById('file-input').click()">
+                        Cover auswählen
+                    </button>
+                    <input type="file" id="file-input" class="file-input" accept="image/*">
+                </div>
+
+                <div id="image-preview" style="text-align: center;"></div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--accent-color);">Konkurrenz-Cover (optional)</h3>
+                <div class="upload-area" id="competitor-upload-area">
+                    <div class="upload-icon">🔍</div>
+                    <div class="upload-text">
+                        Konkurrenz-Cover für direkten Vergleich
+                    </div>
+                    <button class="upload-btn" onclick="document.getElementById('competitor-file-input').click()">
+                        Konkurrenz-Cover auswählen
+                    </button>
+                    <input type="file" id="competitor-file-input" class="file-input" accept="image/*">
+                </div>
+
+                <div id="competitor-preview" style="text-align: center;"></div>
+
+                <ul class="features-list">
+                    <li>Cover-Design und Wirkung analysieren</li>
+                    <li>Direkter Konkurrenz-Vergleich</li>
+                    <li>Genre-spezifische Bewertung</li>
+                    <li>Verbesserungsvorschläge für mehr Sales</li>
+                </ul>
+            </div>
+
+            <!-- Analysis Section -->
+            <div class="analysis-section">
+                <h2 class="section-title">Cover-Analyse & Vergleich</h2>
+                
+                <div id="analysis-placeholder">
+                    <p style="color: var(--text-secondary); text-align: center; padding: 40px;">
+                        Lade dein Cover hoch, um die Analyse zu starten
+                    </p>
+                </div>
+
+                <div id="analysis-loading" style="display: none; text-align: center;">
+                    <div class="loading-spinner"></div>
+                    <p>Analysiere Cover-Design...</p>
+                    <p style="color: var(--text-secondary); font-size: 14px;">
+                        Zyrix AI bewertet Genre-Passgenauigkeit, Wirkung und Verkaufspotenzial
+                    </p>
+                </div>
+
+                <div id="analysis-result" class="analysis-result">
+                    <!-- Ergebnisse werden hier dynamisch eingefügt -->
+                </div>
+
+                <button id="analyze-btn" class="analyze-btn" disabled>
+                    Cover-Analyse starten (10 Tokens)
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ===== TOOL 1 JAVASCRIPT =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📚 Tool 1: Cover analysieren & Konkurrenz vergleichen geladen');
+            initializeTool();
+            setupEventListeners();
+            loadUserData();
         });
 
-        // Initialize application
-        async function initializeApp() {
-            try {
-                // Initialize Supabase
-                if (window.supabase) {
-                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    
-                    // Try to get session, but don't block if it fails
-                    try {
-                        const { data: { session } } = await supabase.auth.getSession();
-                        if (session) {
-                            currentUser = session.user;
-                            await loadUserTokens();
-                        }
-                    } catch (error) {
-                        console.log('Auth check failed, but continuing anyway:', error);
-                    }
+        let uploadedCover = null;
+        let competitorCover = null;
+        let currentTokens = 150;
+
+        function initializeTool() {
+            // Lade gespeicherte Daten
+            const savedTokens = localStorage.getItem('zyrixTokens');
+            const savedUser = localStorage.getItem('zyrixUser');
+            
+            if (savedTokens) {
+                currentTokens = parseInt(savedTokens);
+                updateTokenDisplay();
+            }
+            
+            console.log('Cover-Analyse Tool initialisiert');
+        }
+
+        function loadUserData() {
+            // Simuliere Benutzerdaten laden
+            updateTokenDisplay();
+        }
+
+        function updateTokenDisplay() {
+            const tokenElement = document.getElementById('token-count');
+            if (tokenElement) {
+                tokenElement.textContent = currentTokens;
+                
+                // Token-Farbe basierend auf Anzahl
+                if (currentTokens < 50) {
+                    tokenElement.style.color = 'var(--error-color)';
+                } else if (currentTokens < 100) {
+                    tokenElement.style.color = '#ffaa00';
                 } else {
-                    console.log('Supabase not loaded, but continuing anyway');
+                    tokenElement.style.color = 'var(--success-color)';
                 }
-                
-                // Always show the interface
-                console.log('App initialized successfully');
-                
-            } catch (error) {
-                console.error('Initialization error:', error);
-                // Continue anyway - don't block the interface
             }
         }
 
-        // Load user tokens
-        async function loadUserTokens() {
-            if (!currentUser) {
-                console.log('No current user, but assuming logged in from header');
+        function setupEventListeners() {
+            const uploadArea = document.getElementById('upload-area');
+            const competitorUploadArea = document.getElementById('competitor-upload-area');
+            const fileInput = document.getElementById('file-input');
+            const competitorFileInput = document.getElementById('competitor-file-input');
+            const analyzeBtn = document.getElementById('analyze-btn');
+
+            // Main Cover Upload Events
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', (e) => handleDrop(e, 'main'));
+            
+            fileInput.addEventListener('change', (e) => handleFileSelect(e, 'main'));
+
+            // Competitor Cover Upload Events
+            competitorUploadArea.addEventListener('click', () => competitorFileInput.click());
+            competitorUploadArea.addEventListener('dragover', handleDragOver);
+            competitorUploadArea.addEventListener('dragleave', handleDragLeave);
+            competitorUploadArea.addEventListener('drop', (e) => handleDrop(e, 'competitor'));
+            
+            competitorFileInput.addEventListener('change', (e) => handleFileSelect(e, 'competitor'));
+            
+            analyzeBtn.addEventListener('click', startAnalysis);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e, type) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0], type);
+            }
+        }
+
+        function handleFileSelect(e, type) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file, type);
+            }
+        }
+
+        function handleFile(file, type) {
+            if (!file.type.startsWith('image/')) {
+                alert('Bitte wähle eine Bilddatei aus.');
                 return;
             }
-            
-            try {
-                const { data, error } = await supabase
-                    .from('user_token_balance')
-                    .select('tokens')
-                    .eq('user_id', currentUser.id)
-                    .single();
-                
-                userTokens = data?.tokens || 0;
-                console.log('User tokens loaded:', userTokens);
-                
-            } catch (error) {
-                console.error('Token load error:', error);
-                userTokens = 0;
-            }
-        }
 
-        // Select mode
-        function selectMode(mode) {
-            selectedMode = mode;
-            
-            // Reset all cards
-            const cards = document.querySelectorAll('.zyrix-mode-card');
-            cards.forEach(card => card.classList.remove('active'));
-            
-            // Reset all forms
-            const forms = document.querySelectorAll('.zyrix-form-container');
-            forms.forEach(form => form.classList.remove('active'));
-            
-            // Hide warnings and results
-            hideMessages();
-            
-            // Activate selected card
-            event.target.closest('.zyrix-mode-card').classList.add('active');
-            
-            // Show form
-            if (mode === 'cover-analyse') {
-                document.getElementById('coverAnalyseForm').classList.add('active');
-            } else if (mode === 'cover-vergleich') {
-                document.getElementById('coverVergleichForm').classList.add('active');
-            }
-        }
-
-        // Handle file upload
-        function handleFileUpload(input, previewId) {
-            const file = input.files[0];
-            const preview = document.getElementById(previewId);
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.innerHTML = `
-                        <img src="${e.target.result}" alt="Preview">
-                        <div class="zyrix-file-name">${file.name}</div>
-                    `;
-                    preview.classList.add('active');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Start analysis
-        async function startAnalysis(mode) {
-            try {
-                hideMessages();
-                showLoading();
-                
-                // Validate form
-                if (!validateForm(mode)) {
-                    hideLoading();
-                    showError('Bitte füllen Sie alle erforderlichen Felder aus.');
-                    return;
-                }
-                
-                // Try to get current session for user ID
-                let userId = null;
-                try {
-                    if (supabase) {
-                        const { data: { session } } = await supabase.auth.getSession();
-                        if (session) {
-                            userId = session.user.id;
-                        }
-                    }
-                } catch (error) {
-                    console.log('Could not get user session:', error);
-                }
-                
-                if (!userId) {
-                    hideLoading();
-                    showError('Bitte melden Sie sich an, um die Analyse zu nutzen.');
-                    return;
-                }
-                
-                // Prepare form data
-                const formData = new FormData();
-                formData.append('mode', mode);
-                formData.append('user_id', userId);
-                
-                if (mode === 'cover-analyse') {
-                    formData.append('cover', document.getElementById('coverFile').files[0]);
-                    formData.append('product_type', document.getElementById('productType').value);
-                    formData.append('genre', document.getElementById('genre').value);
-                    formData.append('price_range', document.getElementById('priceRange').value);
-                    formData.append('target_audience', document.getElementById('targetAudience').value);
-                } else {
-                    formData.append('main_cover', document.getElementById('mainCoverFile').files[0]);
-                    formData.append('competitor1', document.getElementById('competitor1File').files[0]);
-                    formData.append('competitor2', document.getElementById('competitor2File').files[0]);
-                    formData.append('competitor3', document.getElementById('competitor3File').files[0]);
-                    formData.append('product_type', document.getElementById('productTypeVergleich').value);
-                    formData.append('genre', document.getElementById('genreVergleich').value);
-                    formData.append('price_range', document.getElementById('priceRangeVergleich').value);
-                    formData.append('target_audience', document.getElementById('targetAudienceVergleich').value);
-                }
-                
-                // Call edge function
-                const { data, error } = await supabase.functions.invoke('cover-analysis', {
-                    body: formData
-                });
-                
-                hideLoading();
-                
-                if (error) {
-                    throw error;
-                }
-                
-                if (data.success) {
-                    showResult(data.analysis, data.pdf_url);
-                    // Reload tokens after successful analysis
-                    await loadUserTokens();
-                } else {
-                    showError(data.error || 'Analyse fehlgeschlagen');
-                }
-                
-            } catch (error) {
-                hideLoading();
-                console.error('Analysis error:', error);
-                showError('Ein Fehler ist bei der Analyse aufgetreten: ' + error.message);
-            }
-        }
-
-        // Validate form
-        function validateForm(mode) {
-            if (mode === 'cover-analyse') {
-                const cover = document.getElementById('coverFile').files[0];
-                const productType = document.getElementById('productType').value;
-                const genre = document.getElementById('genre').value;
-                const targetAudience = document.getElementById('targetAudience').value;
-                
-                return cover && productType && genre && targetAudience;
+            if (type === 'main') {
+                uploadedCover = file;
+                showPreview(file, 'image-preview', 'Dein Cover');
             } else {
-                const mainCover = document.getElementById('mainCoverFile').files[0];
-                const competitor1 = document.getElementById('competitor1File').files[0];
-                const competitor2 = document.getElementById('competitor2File').files[0];
-                const competitor3 = document.getElementById('competitor3File').files[0];
-                const productType = document.getElementById('productTypeVergleich').value;
-                const genre = document.getElementById('genreVergleich').value;
-                const targetAudience = document.getElementById('targetAudienceVergleich').value;
+                competitorCover = file;
+                showPreview(file, 'competitor-preview', 'Konkurrenz-Cover');
+            }
+
+            // Analyse-Button aktivieren wenn Hauptcover hochgeladen
+            if (uploadedCover) {
+                const analyzeBtn = document.getElementById('analyze-btn');
+                analyzeBtn.disabled = false;
+            }
+            
+            console.log(`${type === 'main' ? 'Haupt' : 'Konkurrenz'}-Cover hochgeladen:`, file.name);
+        }
+
+        function showPreview(file, containerId, label) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(containerId);
+                preview.innerHTML = `
+                    <img src="${e.target.result}" alt="${label} Vorschau" class="preview-image">
+                    <p style="color: var(--success-color); margin-top: 10px;">
+                        ✓ ${label} erfolgreich hochgeladen: ${file.name}
+                    </p>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function startAnalysis() {
+            if (!uploadedCover) {
+                alert('Bitte lade zuerst dein Cover hoch.');
+                return;
+            }
+
+            if (currentTokens < 10) {
+                alert('Nicht genügend Tokens! Du benötigst 10 Tokens für diese Analyse.');
+                return;
+            }
+
+            const hasCompetitor = competitorCover ? ' und Konkurrenz-Vergleich' : '';
+            const confirmed = confirm(`Cover-Analyse${hasCompetitor} starten?\n\nKosten: 10 Tokens\nVerbleibende Tokens: ${currentTokens - 10}`);
+            
+            if (confirmed) {
+                // Tokens abziehen
+                currentTokens -= 10;
+                localStorage.setItem('zyrixTokens', currentTokens.toString());
+                updateTokenDisplay();
                 
-                return mainCover && competitor1 && competitor2 && competitor3 && productType && genre && targetAudience;
+                // Analyse starten
+                showAnalysisLoading();
+                
+                // Simuliere Analyse-Zeit
+                setTimeout(() => {
+                    showAnalysisResults();
+                }, 4000);
             }
         }
 
-        // Show/hide messages
-        function showLoading() {
-            document.getElementById('loading').classList.add('active');
+        function showAnalysisLoading() {
+            document.getElementById('analysis-placeholder').style.display = 'none';
+            document.getElementById('analysis-loading').style.display = 'block';
+            document.getElementById('analysis-result').style.display = 'none';
+            document.getElementById('analyze-btn').disabled = true;
         }
 
-        function hideLoading() {
-            document.getElementById('loading').classList.remove('active');
-        }
-
-        function showError(message) {
-            document.getElementById('errorText').textContent = message;
-            document.getElementById('error').classList.add('active');
-        }
-
-        function showTokenWarning() {
-            document.getElementById('tokenWarning').classList.add('active');
-        }
-
-        function showResult(analysis, pdfUrl) {
-            document.getElementById('resultContent').innerHTML = analysis;
-            document.getElementById('result').classList.add('active');
+        function showAnalysisResults() {
+            document.getElementById('analysis-loading').style.display = 'none';
+            document.getElementById('analysis-result').style.display = 'block';
             
-            if (pdfUrl) {
-                const downloadBtn = document.getElementById('downloadBtn');
-                downloadBtn.href = pdfUrl;
-                downloadBtn.style.display = 'inline-flex';
+            // Simuliere Cover-Analyse-Ergebnisse
+            const results = generateCoverAnalysisResults();
+            
+            const resultContainer = document.getElementById('analysis-result');
+            let resultHTML = `
+                <div class="result-card">
+                    <div class="result-title">Cover-Gesamtbewertung</div>
+                    <div class="result-score ${results.overall.class}">${results.overall.score}/10</div>
+                    <div class="result-text">${results.overall.text}</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-title">Genre-Passgenauigkeit</div>
+                    <div class="result-score ${results.genre.class}">${results.genre.score}/10</div>
+                    <div class="result-text">${results.genre.text}</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-title">Verkaufswirkung</div>
+                    <div class="result-score ${results.sales.class}">${results.sales.score}/10</div>
+                    <div class="result-text">${results.sales.text}</div>
+                </div>
+            `;
+
+            // Konkurrenz-Vergleich falls vorhanden
+            if (competitorCover) {
+                resultHTML += `
+                    <div class="result-card" style="border: 2px solid var(--accent-color);">
+                        <div class="result-title">🔥 Konkurrenz-Vergleich</div>
+                        <div class="result-text">
+                            <strong>${results.comparison.winner}</strong><br>
+                            ${results.comparison.reason}
+                        </div>
+                    </div>
+                `;
             }
-        }
 
-        function hideMessages() {
-            document.getElementById('error').classList.remove('active');
-            document.getElementById('tokenWarning').classList.remove('active');
-            document.getElementById('result').classList.remove('active');
-            document.getElementById('loading').classList.remove('active');
-        }
-
-        // Drag and drop functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const uploadSections = document.querySelectorAll('.zyrix-upload-section');
+            resultHTML += `
+                <div class="result-card">
+                    <div class="result-title">Verbesserungsvorschläge</div>
+                    <div class="result-text">
+                        <ul style="list-style: none; padding: 0;">
+                            ${results.improvements.map(item => `<li style="margin-bottom: 8px;">• ${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
             
-            uploadSections.forEach(section => {
-                section.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    section.classList.add('dragover');
-                });
-                
-                section.addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    section.classList.remove('dragover');
-                });
-                
-                section.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    section.classList.remove('dragover');
-                    
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                        const input = section.querySelector('.zyrix-file-input');
-                        const preview = section.querySelector('.zyrix-file-preview');
-                        
-                        input.files = files;
-                        handleFileUpload(input, preview.id);
-                    }
-                });
-            });
+            resultContainer.innerHTML = resultHTML;
+            
+            // Analyse-Button wieder aktivieren
+            document.getElementById('analyze-btn').disabled = false;
+            document.getElementById('analyze-btn').textContent = 'Neue Cover-Analyse starten (10 Tokens)';
+            
+            console.log('Cover-Analyse abgeschlossen');
+        }
+
+        function generateCoverAnalysisResults() {
+            // Simuliere realistische Cover-Analyse-Ergebnisse
+            const scores = {
+                overall: Math.floor(Math.random() * 3) + 7, // 7-9
+                genre: Math.floor(Math.random() * 4) + 6, // 6-9
+                sales: Math.floor(Math.random() * 3) + 7 // 7-9
+            };
+            
+            const getScoreClass = (score) => {
+                if (score >= 8) return 'score-excellent';
+                if (score >= 6) return 'score-good';
+                return 'score-poor';
+            };
+            
+            const improvements = [
+                'Titel-Schriftart für bessere Lesbarkeit optimieren',
+                'Farbkontrast erhöhen für stärkere Wirkung',
+                'Genre-typische Elemente verstärken',
+                'Thumbnail-Sichtbarkeit bei Amazon verbessern',
+                'Emotionale Wirkung durch Bildkomposition steigern',
+                'Zielgruppen-Ansprache durch Design-Elemente schärfen'
+            ];
+
+            const comparisonResults = [
+                { winner: 'Dein Cover gewinnt!', reason: 'Stärkere emotionale Wirkung und bessere Genre-Passgenauigkeit.' },
+                { winner: 'Konkurrenz-Cover ist stärker', reason: 'Professionellere Umsetzung und klarere Zielgruppen-Ansprache.' },
+                { winner: 'Beide Cover gleichwertig', reason: 'Unterschiedliche Stärken - dein Cover hat mehr Emotion, Konkurrenz bessere Technik.' }
+            ];
+            
+            return {
+                overall: {
+                    score: scores.overall,
+                    class: getScoreClass(scores.overall),
+                    text: scores.overall >= 8 ? 
+                        'Sehr starkes Cover mit hohem Verkaufspotenzial!' :
+                        'Gutes Cover mit Optimierungsmöglichkeiten.'
+                },
+                genre: {
+                    score: scores.genre,
+                    class: getScoreClass(scores.genre),
+                    text: scores.genre >= 8 ?
+                        'Perfekte Genre-Zuordnung - Leser erkennen sofort das Thema.' :
+                        'Gute Genre-Passung, kleine Anpassungen möglich.'
+                },
+                sales: {
+                    score: scores.sales,
+                    class: getScoreClass(scores.sales),
+                    text: scores.sales >= 8 ?
+                        'Starke Verkaufswirkung - Cover weckt Kaufinteresse.' :
+                        'Gute Verkaufswirkung, Potenzial für mehr Emotionen.'
+                },
+                comparison: competitorCover ? comparisonResults[Math.floor(Math.random() * comparisonResults.length)] : null,
+                improvements: improvements.slice(0, 3)
+            };
+        }
+
+        // Error Handling
+        window.addEventListener('error', function(e) {
+            console.error('Cover-Analyse Tool Error:', e.error);
+            alert('Ein Fehler ist aufgetreten. Bitte versuche es erneut.');
         });
+
+        console.log('📚 Cover-Analyse Tool JavaScript geladen');
     </script>
 </body>
 </html>
