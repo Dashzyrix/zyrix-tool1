@@ -1,2 +1,1287 @@
-# zyrix-tool1
-Zyrix Cover Analysis Tool
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyrix App - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100% );
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 153, 0, 0.3);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff9900;
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .token-display {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .user-email {
+            color: #ff9900;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #cc3333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 2rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff9900;
+            box-shadow: 0 10px 30px rgba(255, 153, 0, 0.3);
+        }
+
+        .tool-card.available {
+            border-color: #00ff88;
+        }
+
+        .tool-card.available:hover {
+            border-color: #00ff88;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #ff9900;
+        }
+
+        .tool-card.available .tool-title {
+            color: #00ff88;
+        }
+
+        .tool-description {
+            color: #cccccc;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .tool-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-available {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .status-coming-soon {
+            background: #666;
+            color: #fff;
+        }
+
+        .token-cost {
+            color: #ff9900;
+            font-weight: bold;
+        }
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 15px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #ff9900;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff9900;
+            box-shadow: 0 0 10px rgba(255, 153, 0, 0.3);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
+        }
+
+        .form-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #cccccc;
+        }
+
+        .auth-link {
+            color: #ff9900;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        .token-purchase {
+            background: rgba(255, 153, 0, 0.1);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .token-packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .token-package {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .token-package:hover {
+            border-color: #ff9900;
+            transform: translateY(-3px);
+        }
+
+        .package-tokens {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff9900;
+            margin-bottom: 0.5rem;
+        }
+
+        .package-price {
+            font-size: 1.2rem;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        .package-rate {
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 153, 0, 0.3);
+            border-top: 4px solid #ff9900;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .success-message {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading">
+        <div class="spinner"></div>
+        <p>Lade Zyrix App...</p>
+    </div>
+
+    <!-- Authentication Screen -->
+    <div id="authScreen" class="auth-container hidden">
+        <div class="auth-card">
+            <!-- Login Form -->
+            <div id="loginForm">
+                <h2 class="auth-title">🔑 Zyrix Login</h2>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label class="form-label">E-Mail:</label>
+                        <input type="email" id="loginEmail" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Passwort:</label>
+                        <input type="password" id="loginPassword" class="form-input" required>
+                    </div>
+                    <button type="submit" class="form-button" id="loginButton">Anmelden</button>
+                </form>
+                <div class="auth-switch">
+                    Noch kein Konto? <span class="auth-link" onclick="showRegister()">Jetzt registrieren</span>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="hidden">
+                <h2 class="auth-title">✨ Zyrix Registrierung</h2>
+                <form id="registerFormElement">
+                    <div class="form-group">
+                        <label class="form-label">E-Mail:</label>
+                        <input type="email" id="registerEmail" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Passwort:</label>
+                        <input type="password" id="registerPassword" class="form-input" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Passwort bestätigen:</label>
+                        <input type="password" id="registerPasswordConfirm" class="form-input" required minlength="6">
+                    </div>
+                    <button type="submit" class="form-button" id="registerButton">Registrieren</button>
+                </form>
+                <div class="auth-switch">
+                    Bereits registriert? <span class="auth-link" onclick="showLogin()">Jetzt anmelden</span>
+                </div>
+            </div>
+
+            <div id="authMessage"></div>
+        </div>
+    </div>
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <a href="#" class="logo">🚀 Zyrix</a>
+                <div class="user-info">
+                    <span class="user-email" id="userEmail">Lädt...</span>
+                    <span class="token-display" id="tokenDisplay">Lädt...</span>
+                    <button class="logout-btn" onclick="logout()">Abmelden</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h1 class="welcome-title">🎯 Willkommen bei Zyrix</h1>
+                <p class="welcome-subtitle">Ihr unfairer Vorteil auf Amazon - 11 Tools, 1 System, 100% Sellerfokus</p>
+            </section>
+
+            <!-- Token Purchase Section -->
+            <section class="token-purchase">
+                <h2 style="color: #ff9900; margin-bottom: 1rem;">💰 Token nachkaufen</h2>
+                <p style="color: #cccccc; margin-bottom: 1rem;">Tokens aufgebraucht? Kaufen Sie flexibel nach!</p>
+                <div class="token-packages">
+                    <div class="token-package" onclick="purchaseTokens(1000, 12)">
+                        <div class="package-tokens">1.000</div>
+                        <div class="package-price">12€</div>
+                        <div class="package-rate">1,2 Cent/Token</div>
+                    </div>
+                    <div class="token-package" onclick="purchaseTokens(2500, 25)">
+                        <div class="package-tokens">2.500</div>
+                        <div class="package-price">25€</div>
+                        <div class="package-rate">1,0 Cent/Token</div>
+                    </div>
+                    <div class="token-package" onclick="purchaseTokens(5000, 45)">
+                        <div class="package-tokens">5.000</div>
+                        <div class="package-price">45€</div>
+                        <div class="package-rate">0,9 Cent/Token</div>
+                    </div>
+                    <div class="token-package" onclick="purchaseTokens(10000, 80)">
+                        <div class="package-tokens">10.000</div>
+                        <div class="package-price">80€</div>
+                        <div class="package-rate">0,8 Cent/Token</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Grid -->
+            <section class="tools-grid">
+                <!-- Tool 1: Cover Analysis -->
+                <div class="tool-card available" onclick="openTool('bild-cover-analyse')">
+                    <div class="tool-icon">📸</div>
+                    <h3 class="tool-title">Bild Cover Analyse</h3>
+                    <p class="tool-description">Professionelle Analyse Ihrer Buchcover und Produktbilder mit detailliertem Konkurrenzvergleich</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-available">✅ Verfügbar</span>
+                        <span class="token-cost">120-150 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 2: Title Generator -->
+                <div class="tool-card" onclick="showComingSoon('Titel Generator')">
+                    <div class="tool-icon">📝</div>
+                    <h3 class="tool-title">Titel Generator</h3>
+                    <p class="tool-description">Erstellen Sie verkaufsstarke Titel, die mehr Sichtbarkeit und Klicks generieren</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">80-120 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 3: Bulletpoints -->
+                <div class="tool-card" onclick="showComingSoon('Bulletpoint Generator')">
+                    <div class="tool-icon">📋</div>
+                    <h3 class="tool-title">Bulletpoint Generator</h3>
+                    <p class="tool-description">Verkaufsstarke Bulletpoints mit emotionalen Triggern und Nutzenorientierung</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">60-100 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 4: Product Description -->
+                <div class="tool-card" onclick="showComingSoon('Produktbeschreibung')">
+                    <div class="tool-icon">📖</div>
+                    <h3 class="tool-title">Produktbeschreibung</h3>
+                    <p class="tool-description">Professionelle Produktbeschreibungen mit Storytelling und klarer Struktur</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">100-150 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 5: A+ Content -->
+                <div class="tool-card" onclick="showComingSoon('A+ Content Generator')">
+                    <div class="tool-icon">🎨</div>
+                    <h3 class="tool-title">A+ Content Generator</h3>
+                    <p class="tool-description">Ideen für A+ Content und EBC-Module für mehr Verweildauer und Vertrauen</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">120-180 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 6: Competitor Analysis -->
+                <div class="tool-card" onclick="showComingSoon('Konkurrenz Vergleich')">
+                    <div class="tool-icon">⚖️</div>
+                    <h3 class="tool-title">Konkurrenz Vergleich</h3>
+                    <p class="tool-description">Text- und Bildvergleich mit direktem Stärken-/Schwächen-Profil</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">150-200 Tokens</span>
+                    </div>
+                </div>
+                <!-- Tool 1: Cover Analysis -->
+                <div class="tool-card available" onclick="openTool('bild-cover-analyse')">
+                    <div class="tool-icon">📸</div>
+                    <h3 class="tool-title">Bild Cover Analyse</h3>
+                    <p class="tool-description">Professionelle Analyse Ihrer Buchcover und Produktbilder mit detailliertem Konkurrenzvergleich</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-available">✅ Verfügbar</span>
+                        <span class="token-cost">120-150 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 2: Title Generator -->
+                <div class="tool-card" onclick="showComingSoon('Titel Generator')">
+                    <div class="tool-icon">📝</div>
+                    <h3 class="tool-title">Titel Generator</h3>
+                    <p class="tool-description">Erstellen Sie verkaufsstarke Titel, die mehr Sichtbarkeit und Klicks generieren</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">80-120 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 3: Bulletpoints -->
+                <div class="tool-card" onclick="showComingSoon('Bulletpoint Generator')">
+                    <div class="tool-icon">📋</div>
+                    <h3 class="tool-title">Bulletpoint Generator</h3>
+                    <p class="tool-description">Verkaufsstarke Bulletpoints mit emotionalen Triggern und Nutzenorientierung</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">60-100 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 4: Product Description -->
+                <div class="tool-card" onclick="showComingSoon('Produktbeschreibung')">
+                    <div class="tool-icon">📖</div>
+                    <h3 class="tool-title">Produktbeschreibung</h3>
+                    <p class="tool-description">Professionelle Produktbeschreibungen mit Storytelling und klarer Struktur</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">100-150 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 5: A+ Content -->
+                <div class="tool-card" onclick="showComingSoon('A+ Content Generator')">
+                    <div class="tool-icon">🎨</div>
+                    <h3 class="tool-title">A+ Content Generator</h3>
+                    <p class="tool-description">Ideen für A+ Content und EBC-Module für mehr Verweildauer und Vertrauen</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">120-180 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 6: Competitor Analysis -->
+                <div class="tool-card" onclick="showComingSoon('Konkurrenz Vergleich')">
+                    <div class="tool-icon">⚖️</div>
+                    <h3 class="tool-title">Konkurrenz Vergleich</h3>
+                    <p class="tool-description">Text- und Bildvergleich mit direktem Stärken-/Schwächen-Profil</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">150-200 Tokens</span>
+                    </div>
+                </div>
+                <!-- Tool 7: Review Simulator -->
+                <div class="tool-card" onclick="showComingSoon('Review Simulator')">
+                    <div class="tool-icon">🔍</div>
+                    <h3 class="tool-title">Review Simulator</h3>
+                    <p class="tool-description">Testen Sie Ihr Produkt vor dem Launch auf typische Schwächen und Kundenreaktionen</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">100-140 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 8: Marketing Ideas -->
+                <div class="tool-card" onclick="showComingSoon('Marketing Ideen')">
+                    <div class="tool-icon">📈</div>
+                    <h3 class="tool-title">Marketing Ideen</h3>
+                    <p class="tool-description">Sofort umsetzbare Marketingideen und Wachstumshebel für Ihr Produkt</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">80-120 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 9: Ads Analysis -->
+                <div class="tool-card" onclick="showComingSoon('Werbeanzeigen Analyse')">
+                    <div class="tool-icon">🎯</div>
+                    <h3 class="tool-title">Werbeanzeigen Analyse</h3>
+                    <p class="tool-description">Analysieren Sie Ihre Amazon Ads-Berichte und erhalten Sie Optimierungsempfehlungen</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">120-160 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 10: Scaling Strategies -->
+                <div class="tool-card" onclick="showComingSoon('Skalierungsstrategien')">
+                    <div class="tool-icon">🚀</div>
+                    <h3 class="tool-title">Skalierungsstrategien</h3>
+                    <p class="tool-description">Strategien für Hochskalierung basierend auf Verkaufsdaten und Marktauftritt</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">150-200 Tokens</span>
+                    </div>
+                </div>
+
+                <!-- Tool 11: Niche Analysis -->
+                <div class="tool-card" onclick="showComingSoon('Nischen Analyse')">
+                    <div class="tool-icon">🔍</div>
+                    <h3 class="tool-title">Nischen Analyse</h3>
+                    <p class="tool-description">Bewerten Sie neue Produktideen auf Nachfrage, Wettbewerb und Wachstumschancen</p>
+                    <div class="tool-status">
+                        <span class="status-badge status-coming-soon">🚧 Bald verfügbar</span>
+                        <span class="token-cost">180-250 Tokens</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+// ===== TEIL 9: JAVASCRIPT - FINAL =====
+// Hauptfunktionalität für die AI Tools Dashboard Anwendung
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('AI Tools Dashboard geladen');
+    
+    // Initialisierung
+    initializeApp();
+    setupEventListeners();
+    updateUserInterface();
+});
+
+// ===== INITIALISIERUNG =====
+function initializeApp() {
+    // Prüfe ob Benutzer eingeloggt ist
+    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    
+    if (!isLoggedIn) {
+        // Weiterleitung zur Login-Seite falls nicht eingeloggt
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    // Lade Benutzerdaten
+    loadUserData();
+    
+    // Initialisiere Token-System
+    initializeTokenSystem();
+    
+    console.log('App erfolgreich initialisiert');
+}
+
+// ===== BENUTZERDATEN MANAGEMENT =====
+function loadUserData() {
+    // Simulierte Benutzerdaten (in echter App würden diese vom Server kommen)
+    const userData = {
+        username: localStorage.getItem('username') || 'Max Mustermann',
+        email: localStorage.getItem('email') || 'max@example.com',
+        tokens: parseInt(localStorage.getItem('userTokens')) || 150,
+        memberSince: localStorage.getItem('memberSince') || '2024',
+        plan: localStorage.getItem('userPlan') || 'Premium'
+    };
+    
+    // Speichere Daten global
+    window.currentUser = userData;
+    
+    console.log('Benutzerdaten geladen:', userData);
+}
+
+function updateUserInterface() {
+    const user = window.currentUser;
+    
+    // Update Benutzername
+    const usernameElement = document.getElementById('username');
+    if (usernameElement) {
+        usernameElement.textContent = user.username;
+    }
+    
+    // Update Token-Anzeige
+    const tokenCountElement = document.getElementById('token-count');
+    if (tokenCountElement) {
+        tokenCountElement.textContent = user.tokens;
+    }
+    
+    // Update Willkommensnachricht
+    const welcomeMessage = document.querySelector('.welcome-message h2');
+    if (welcomeMessage) {
+        welcomeMessage.textContent = `Willkommen zurück, ${user.username}!`;
+    }
+    
+    // Update Token-Status
+    updateTokenStatus();
+}
+
+// ===== TOKEN-SYSTEM =====
+function initializeTokenSystem() {
+    updateTokenDisplay();
+    setupTokenPurchaseButtons();
+}
+
+function updateTokenDisplay() {
+    const tokenCount = window.currentUser.tokens;
+    const tokenElement = document.getElementById('token-count');
+    
+    if (tokenElement) {
+        tokenElement.textContent = tokenCount;
+        
+        // Farbcodierung basierend auf Token-Anzahl
+        if (tokenCount < 50) {
+            tokenElement.style.color = '#e74c3c';
+        } else if (tokenCount < 100) {
+            tokenElement.style.color = '#f39c12';
+        } else {
+            tokenElement.style.color = '#27ae60';
+        }
+    }
+}
+
+function updateTokenStatus() {
+    const tokens = window.currentUser.tokens;
+    const statusElement = document.querySelector('.token-status');
+    
+    if (statusElement) {
+        if (tokens < 20) {
+            statusElement.innerHTML = '<span style="color: #e74c3c;">⚠️ Niedrige Token-Anzahl</span>';
+        } else if (tokens < 50) {
+            statusElement.innerHTML = '<span style="color: #f39c12;">⚡ Moderate Token-Anzahl</span>';
+        } else {
+            statusElement.innerHTML = '<span style="color: #27ae60;">✅ Ausreichend Tokens</span>';
+        }
+    }
+}
+
+function setupTokenPurchaseButtons() {
+    const purchaseButtons = document.querySelectorAll('.token-option button');
+    
+    purchaseButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tokenAmount = parseInt(this.getAttribute('data-tokens'));
+            const price = this.getAttribute('data-price');
+            
+            purchaseTokens(tokenAmount, price);
+        });
+    });
+}
+
+function purchaseTokens(amount, price) {
+    // Simuliere Token-Kauf
+    const confirmed = confirm(`Möchten Sie ${amount} Tokens für ${price} kaufen?`);
+    
+    if (confirmed) {
+        // Füge Tokens hinzu
+        window.currentUser.tokens += amount;
+        localStorage.setItem('userTokens', window.currentUser.tokens.toString());
+        
+        // Update UI
+        updateTokenDisplay();
+        updateTokenStatus();
+        
+        // Erfolgs-Nachricht
+        showNotification(`Erfolgreich ${amount} Tokens gekauft!`, 'success');
+        
+        console.log(`Token-Kauf: +${amount} Tokens`);
+    }
+}
+
+// ===== TOOL-FUNKTIONALITÄT =====
+function setupEventListeners() {
+    // Tool-Buttons
+    setupToolButtons();
+    
+    // Logout-Button
+    setupLogoutButton();
+    
+    // Navigation
+    setupNavigation();
+    
+    // Weitere UI-Elemente
+    setupMiscellaneousEvents();
+}
+
+function setupToolButtons() {
+    const toolButtons = document.querySelectorAll('.tool-card');
+    
+    toolButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            const toolName = this.querySelector('h3').textContent;
+            const toolCost = parseInt(this.getAttribute('data-cost')) || 10;
+            
+            useTool(toolName, toolCost, index + 1);
+        });
+        
+        // Hover-Effekte
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+        });
+    });
+}
+
+function useTool(toolName, cost, toolNumber) {
+    // Prüfe ob genügend Tokens vorhanden
+    if (window.currentUser.tokens < cost) {
+        showNotification('Nicht genügend Tokens! Bitte kaufen Sie weitere Tokens.', 'error');
+        return;
+    }
+    
+    // Bestätigung
+    const confirmed = confirm(`${toolName} verwenden?\nKosten: ${cost} Tokens`);
+    
+    if (confirmed) {
+        // Tokens abziehen
+        window.currentUser.tokens -= cost;
+        localStorage.setItem('userTokens', window.currentUser.tokens.toString());
+        
+        // UI aktualisieren
+        updateTokenDisplay();
+        updateTokenStatus();
+        
+        // Tool-spezifische Aktionen
+        executeToolAction(toolName, toolNumber);
+        
+        // Erfolgs-Nachricht
+        showNotification(`${toolName} erfolgreich verwendet!`, 'success');
+        
+        console.log(`Tool verwendet: ${toolName} (-${cost} Tokens)`);
+    }
+}
+
+function executeToolAction(toolName, toolNumber) {
+    // Simuliere Tool-spezifische Aktionen
+    const actions = {
+        1: () => simulateTextGeneration(),
+        2: () => simulateImageGeneration(),
+        3: () => simulateCodeGeneration(),
+        4: () => simulateDataAnalysis(),
+        5: () => simulateTranslation(),
+        6: () => simulateContentOptimization(),
+        7: () => simulateVoiceGeneration(),
+        8: () => simulateVideoCreation(),
+        9: () => simulateChatbot(),
+        10: () => simulateResearch(),
+        11: () => simulateAutomation()
+    };
+    
+    const action = actions[toolNumber];
+    if (action) {
+        action();
+    }
+}
+
+// ===== TOOL-SIMULATIONEN =====
+function simulateTextGeneration() {
+    showLoadingModal('Text wird generiert...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Text-Generator', 'Ihr Text wurde erfolgreich generiert!');
+    }, 2000);
+}
+
+function simulateImageGeneration() {
+    showLoadingModal('Bild wird erstellt...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Bild-Generator', 'Ihr Bild wurde erfolgreich erstellt!');
+    }, 3000);
+}
+
+function simulateCodeGeneration() {
+    showLoadingModal('Code wird generiert...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Code-Generator', 'Ihr Code wurde erfolgreich generiert!');
+    }, 2500);
+}
+
+function simulateDataAnalysis() {
+    showLoadingModal('Daten werden analysiert...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Daten-Analyse', 'Ihre Analyse wurde erfolgreich durchgeführt!');
+    }, 4000);
+}
+
+function simulateTranslation() {
+    showLoadingModal('Text wird übersetzt...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Übersetzer', 'Ihr Text wurde erfolgreich übersetzt!');
+    }, 1500);
+}
+
+function simulateContentOptimization() {
+    showLoadingModal('Content wird optimiert...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Content-Optimierung', 'Ihr Content wurde erfolgreich optimiert!');
+    }, 3500);
+}
+
+function simulateVoiceGeneration() {
+    showLoadingModal('Sprache wird generiert...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Sprach-Generator', 'Ihre Sprachdatei wurde erfolgreich erstellt!');
+    }, 3000);
+}
+
+function simulateVideoCreation() {
+    showLoadingModal('Video wird erstellt...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Video-Creator', 'Ihr Video wurde erfolgreich erstellt!');
+    }, 5000);
+}
+
+function simulateChatbot() {
+    showLoadingModal('Chatbot wird gestartet...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('AI-Chatbot', 'Chatbot ist bereit für Ihre Fragen!');
+    }, 1000);
+}
+
+function simulateResearch() {
+    showLoadingModal('Recherche läuft...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Recherche-Assistent', 'Ihre Recherche wurde erfolgreich abgeschlossen!');
+    }, 4500);
+}
+
+function simulateAutomation() {
+    showLoadingModal('Automatisierung wird eingerichtet...');
+    setTimeout(() => {
+        hideLoadingModal();
+        showResultModal('Automatisierung', 'Ihre Automatisierung wurde erfolgreich eingerichtet!');
+    }, 3000);
+}
+
+// ===== MODAL-SYSTEM =====
+function showLoadingModal(message) {
+    const modal = document.createElement('div');
+    modal.id = 'loading-modal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="loading-spinner"></div>
+            <h3>${message}</h3>
+            <p>Bitte warten Sie einen Moment...</p>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+}
+
+function hideLoadingModal() {
+    const modal = document.getElementById('loading-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function showResultModal(title, message) {
+    const modal = document.createElement('div');
+    modal.id = 'result-modal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>✅ ${title}</h3>
+            <p>${message}</p>
+            <button class="btn-primary" onclick="closeResultModal()">OK</button>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+    
+    // Close-Event
+    modal.querySelector('.close-modal').addEventListener('click', closeResultModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeResultModal();
+        }
+    });
+}
+
+function closeResultModal() {
+    const modal = document.getElementById('result-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// ===== LOGOUT-FUNKTIONALITÄT =====
+function setupLogoutButton() {
+    const logoutButton = document.getElementById('logout-btn');
+    
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function() {
+            logout();
+        });
+    }
+}
+
+function logout() {
+    const confirmed = confirm('Möchten Sie sich wirklich abmelden?');
+    
+    if (confirmed) {
+        // Lösche Sitzungsdaten
+        localStorage.removeItem('userLoggedIn');
+        localStorage.removeItem('username');
+        localStorage.removeItem('email');
+        
+        // Zeige Abmelde-Nachricht
+        showNotification('Erfolgreich abgemeldet!', 'info');
+        
+        // Weiterleitung nach kurzer Verzögerung
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
+        
+        console.log('Benutzer abgemeldet');
+    }
+}
+
+// ===== NAVIGATION =====
+function setupNavigation() {
+    // Smooth Scrolling für interne Links
+    const navLinks = document.querySelectorAll('a[href^="#"]');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+}
+
+// ===== BENACHRICHTIGUNGSSYSTEM =====
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span class="notification-message">${message}</span>
+        <span class="notification-close">&times;</span>
+    `;
+    
+    // Styling
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        min-width: 300px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    
+    // Typ-spezifische Farben
+    const colors = {
+        success: '#27ae60',
+        error: '#e74c3c',
+        warning: '#f39c12',
+        info: '#3498db'
+    };
+    
+    notification.style.backgroundColor = colors[type] || colors.info;
+    
+    document.body.appendChild(notification);
+    
+    // Animation einblenden
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Close-Event
+    notification.querySelector('.notification-close').addEventListener('click', function() {
+        removeNotification(notification);
+    });
+    
+    // Auto-Remove nach 5 Sekunden
+    setTimeout(() => {
+        removeNotification(notification);
+    }, 5000);
+}
+
+function removeNotification(notification) {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 300);
+}
+
+// ===== WEITERE UI-EVENTS =====
+function setupMiscellaneousEvents() {
+    // Responsive Menu Toggle (falls vorhanden)
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+    }
+    
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', function(e) {
+        // ESC zum Schließen von Modals
+        if (e.key === 'Escape') {
+            closeResultModal();
+            hideLoadingModal();
+        }
+        
+        // Ctrl+L für Logout
+        if (e.ctrlKey && e.key === 'l') {
+            e.preventDefault();
+            logout();
+        }
+    });
+    
+    // Scroll-to-Top Button
+    const scrollTopBtn = document.createElement('button');
+    scrollTopBtn.innerHTML = '↑';
+    scrollTopBtn.className = 'scroll-top-btn';
+    scrollTopBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #667eea;
+        color: white;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        display: none;
+        z-index: 1000;
+        transition: all 0.3s ease;
+    `;
+    
+    document.body.appendChild(scrollTopBtn);
+    
+    // Scroll-Event für Back-to-Top Button
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            scrollTopBtn.style.display = 'block';
+        } else {
+            scrollTopBtn.style.display = 'none';
+        }
+    });
+    
+    scrollTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// ===== UTILITY-FUNKTIONEN =====
+function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function getCurrentTimestamp() {
+    return new Date().toISOString();
+}
+
+function generateUniqueId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+// ===== PERFORMANCE MONITORING =====
+function logPerformance(action) {
+    const timestamp = getCurrentTimestamp();
+    console.log(`[${timestamp}] Action: ${action}`);
+}
+
+// ===== ERROR HANDLING =====
+window.addEventListener('error', function(e) {
+    console.error('JavaScript Error:', e.error);
+    showNotification('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', 'error');
+});
+
+// ===== EXPORT FÜR TESTING =====
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        useTool,
+        purchaseTokens,
+        logout,
+        showNotification
+    };
+}
+
+console.log('🚀 AI Tools Dashboard JavaScript geladen - Version 1.0');
+
