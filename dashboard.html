@@ -1,0 +1,821 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyrix.de - 11 Tools Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ZYRIX ORIGINAL DESIGN ===== */
+        :root {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2a2a2a;
+            --accent-color: #ff9500;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: #333333;
+            --success-color: #00ff88;
+            --card-bg: #252525;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-left: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .login-btn, .register-btn {
+            padding: 8px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn {
+            color: var(--text-primary);
+            background: transparent;
+            border: 1px solid var(--border-color);
+        }
+
+        .register-btn {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+        }
+
+        .register-btn:hover {
+            background: #ffaa00;
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--accent-color), #ffcc00, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card.premium {
+            border: 2px solid var(--accent-color);
+            position: relative;
+        }
+
+        .tool-card.premium::before {
+            content: '⭐ PREMIUM';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 40px rgba(255, 149, 0, 0.2);
+        }
+
+        .tool-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .tool-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .tool-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .tool-features li {
+            color: var(--success-color);
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            margin-right: 10px;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+
+        .loading-spinner {
+            border: 4px solid var(--border-color);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #ffaa00;
+            transform: translateY(-2px);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            min-width: 300px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-success { background: var(--success-color); }
+        .notification-error { background: #ff4444; }
+        .notification-info { background: #3498db; }
+
+        .notification-close {
+            float: right;
+            margin-left: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .header-subtitle {
+                margin-left: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <a href="#" class="logo">Zyrix.de</a>
+                <span class="header-subtitle">Die Abkürzung zum Erfolg im E-Commerce. Wer verkauft, nutzt Zyrix.</span>
+            </div>
+            <div class="user-info">
+                <a href="#" class="login-btn">Login</a>
+                <a href="#" class="register-btn">Registrieren</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">11 Tools – 1 System. 100% Sellerfokus.</h1>
+            <p class="hero-subtitle">Von der Produktbild-Analyse bis zur Skalierungsstrategie – alles was Amazon-Seller für maximalen Erfolg brauchen</p>
+        </section>
+
+        <!-- Tools Grid -->
+        <section class="tools-grid">
+            <!-- Tool 1: Produktbilder & Covers analysieren -->
+            <div class="tool-card" data-tool="1">
+                <span class="tool-icon">🖼️</span>
+                <h3>Produktbilder & Covers analysieren</h3>
+                <p>Finde in Sekunden heraus, ob dein Produktbild oder Cover überzeugt – oder ob ein Mitbewerber visuell stärker wirkt.</p>
+                <ul class="tool-features">
+                    <li>Klarheit, Vertrauen, Zielgruppenwirkung, Verkaufspsychologie</li>
+                    <li>Eigene & Konkurrenzbilder vergleichen</li>
+                    <li>Sofort umsetzbare Empfehlungen</li>
+                </ul>
+            </div>
+
+            <!-- Tool 2: Titel erstellen, die verkaufen -->
+            <div class="tool-card" data-tool="2">
+                <span class="tool-icon">✏️</span>
+                <h3>Titel erstellen, die verkaufen</h3>
+                <p>Dein Titel entscheidet über Klick oder Scroll. Wir liefern dir Varianten, die wirklich neugierig machen und genau auf deine Zielgruppe zugeschnitten sind.</p>
+                <ul class="tool-features">
+                    <li>Mehr Sichtbarkeit & Klicks</li>
+                    <li>Emotional aufgeladen + suchstark</li>
+                    <li>Sofort bereit für den Upload</li>
+                </ul>
+            </div>
+
+            <!-- Tool 3: Verkaufsstarke Bulletpoints generieren -->
+            <div class="tool-card" data-tool="3">
+                <span class="tool-icon">📋</span>
+                <h3>Verkaufsstarke Bulletpoints generieren</h3>
+                <p>Ob KDP oder FBA – du bekommst sofort überzeugende Bulletpoints, die das Interesse wecken und klar machen, warum dein Produkt die beste Wahl ist.</p>
+                <ul class="tool-features">
+                    <li>Nutzenorientiert</li>
+                    <li>Emotionale Trigger</li>
+                    <li>Ideal für Amazon</li>
+                </ul>
+            </div>
+
+            <!-- Tool 4: Produktbeschreibung auf Profi-Niveau -->
+            <div class="tool-card" data-tool="4">
+                <span class="tool-icon">📖</span>
+                <h3>Produktbeschreibung auf Profi-Niveau</h3>
+                <p>Keine Floskeln, keine langen Schleifen. Du bekommst strukturierte Texte, die Vertrauen aufbauen, Bedürfnisse ansprechen und zum Kauf führen.</p>
+                <ul class="tool-features">
+                    <li>KDP, FBA, FBM</li>
+                    <li>Conversionstark formuliert</li>
+                    <li>Mit Storytelling & klarer Struktur</li>
+                </ul>
+            </div>
+
+            <!-- Tool 5: Ideen für A+ Content / EBC-Module -->
+            <div class="tool-card" data-tool="5">
+                <span class="tool-icon">🎨</span>
+                <h3>Ideen für A+ Content / EBC-Module</h3>
+                <p>Hol das Maximum aus deinem Markenauftritt heraus – wir liefern dir in Sekunden die perfekte Struktur, Textbausteine und Bildideen.</p>
+                <ul class="tool-features">
+                    <li>Für mehr Verweildauer und Vertrauen</li>
+                    <li>Klarer Aufbau + optische Ideen</li>
+                    <li>Keine Designkenntnisse nötig</li>
+                </ul>
+            </div>
+
+            <!-- Tool 6: Text- & Bildvergleich mit Konkurrenz -->
+            <div class="tool-card" data-tool="6">
+                <span class="tool-icon">⚖️</span>
+                <h3>Text- & Bildvergleich mit Konkurrenz</h3>
+                <p>Lade dein Material und das der Mitbewerber hoch – und du erfährst sofort, wer überzeugt. Und warum.</p>
+                <ul class="tool-features">
+                    <li>Direktes Stärken-/Schwächen-Profil</li>
+                    <li>Klare Empfehlungen zur Verbesserung</li>
+                    <li>Für Titel, Bilder, Beschreibung, Auftritt</li>
+                </ul>
+            </div>
+
+            <!-- Tool 7: Kritik-Prognose (Review-Simulator) -->
+            <div class="tool-card" data-tool="7">
+                <span class="tool-icon">🔍</span>
+                <h3>Kritik-Prognose (Review-Simulator)</h3>
+                <p>Teste dein Produkt vor dem Launch auf typische Schwächen – du bekommst realistische Kundenreaktionen wie in echten Rezensionen.</p>
+                <ul class="tool-features">
+                    <li>Vor Launch oder Redesign</li>
+                    <li>Typische Kaufargumente erkennen</li>
+                    <li>Fehler vermeiden, bevor sie teuer werden</li>
+                </ul>
+            </div>
+
+            <!-- Tool 8: Marketingideen & Wachstumshebel -->
+            <div class="tool-card" data-tool="8">
+                <span class="tool-icon">📈</span>
+                <h3>Marketingideen & Wachstumshebel</h3>
+                <p>Du bekommst sofort Vorschläge für deinen Markenaufbau, Zielgruppenansprache, Positionierung und mehr Verkäufe – ohne externe Agentur.</p>
+                <ul class="tool-features">
+                    <li>Sofort umsetzbar</li>
+                    <li>Individuell für dein Produkt</li>
+                    <li>Fokus auf Umsatzwachstum</li>
+                </ul>
+            </div>
+
+            <!-- Tool 9: Werbeanzeigen-Berichte analysieren -->
+            <div class="tool-card" data-tool="9">
+                <span class="tool-icon">🎯</span>
+                <h3>Werbeanzeigen-Berichte analysieren</h3>
+                <p>Lade deine Amazon Ads-Berichte hoch oder kopiere Kampagnendaten – wir zeigen dir, welche Suchbegriffe funktionieren und wie du optimieren kannst.</p>
+                <ul class="tool-features">
+                    <li>CSV-Upload oder Copy-Paste</li>
+                    <li>Keyword-Performance erkennen</li>
+                    <li>Optimierungsempfehlungen</li>
+                </ul>
+            </div>
+
+            <!-- Tool 10: Skalierungsstrategien für mehr Sales -->
+            <div class="tool-card" data-tool="10">
+                <span class="tool-icon">🚀</span>
+                <h3>Skalierungsstrategien für mehr Sales</h3>
+                <p>Dein Produkt läuft gut? Dann zeig uns, was du aktuell machst – und wir zeigen dir, wie du es verdoppeln kannst.</p>
+                <ul class="tool-features">
+                    <li>Hochskalierung Schritt für Schritt</li>
+                    <li>Basierend auf Verkaufsdaten & Auftritt</li>
+                    <li>Wachstumshebel direkt abrufbar</li>
+                </ul>
+            </div>
+
+            <!-- Tool 11: Nischenanalyse mit Potenzialbewertung -->
+            <div class="tool-card" data-tool="11">
+                <span class="tool-icon">🔍</span>
+                <h3>Nischenanalyse mit Potenzialbewertung</h3>
+                <p>Teste neue Produktideen oder Buchnischen auf Nachfrage, Wettbewerb und Wachstumschancen – bevor du Zeit und Geld investierst.</p>
+                <ul class="tool-features">
+                    <li>Basierend auf Marktdaten & Trends</li>
+                    <li>Individuelle Potenzial-Skala</li>
+                    <li>Auch ohne Amazon-API nutzbar</li>
+                </ul>
+            </div>
+
+            <!-- Tool 12: Hybrid-System: Abo + Tokens (Premium) -->
+            <div class="tool-card premium" data-tool="12">
+                <span class="tool-icon">🔄</span>
+                <h3>Hybrid-System: Abo + Tokens</h3>
+                <p>Planbare Kosten durch Monatsabo + flexible Zusatz-Tokens für Power-User</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                    <div style="background: rgba(255,149,0,0.1); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 24px;">📅</div>
+                        <strong>Monatsabo</strong><br>
+                        <small>Inkl. Basis-Tokens</small>
+                    </div>
+                    <div style="background: rgba(255,149,0,0.1); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 24px;">⚡</div>
+                        <strong>Power-User?</strong><br>
+                        <small>Tokens nachkaufen</small>
+                    </div>
+                    <div style="background: rgba(255,149,0,0.1); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 24px;">💰</div>
+                        <strong>z.B. 19€</strong><br>
+                        <small>≈ 1.900 Extra-Tokens</small>
+                    </div>
+                    <div style="background: rgba(255,149,0,0.1); padding: 15px; border-radius: 10px;">
+                        <div style="font-size: 24px;">🎯</div>
+                        <strong>Beste Balance</strong><br>
+                        <small>Planbar + flexibel</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ===== ZYRIX TOOLS DASHBOARD JAVASCRIPT =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Zyrix Tools Dashboard geladen');
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            setupToolButtons();
+            setupHeaderButtons();
+        }
+
+        function setupToolButtons() {
+            const toolButtons = document.querySelectorAll('.tool-card');
+            
+            toolButtons.forEach((button) => {
+                button.addEventListener('click', function() {
+                    const toolNumber = this.getAttribute('data-tool');
+                    const toolName = this.querySelector('h3').textContent;
+                    
+                    useTool(toolName, toolNumber);
+                });
+            });
+        }
+
+        function setupHeaderButtons() {
+            const loginBtn = document.querySelector('.login-btn');
+            const registerBtn = document.querySelector('.register-btn');
+            
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showNotification('Login-Funktion wird geladen...', 'info');
+                });
+            }
+            
+            if (registerBtn) {
+                registerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showNotification('Registrierung wird geladen...', 'info');
+                });
+            }
+        }
+
+        function useTool(toolName, toolNumber) {
+            if (toolNumber === '12') {
+                showPremiumModal();
+                return;
+            }
+            
+            const confirmed = confirm(`${toolName} starten?\n\nDieses Tool hilft dir bei der Optimierung deiner Amazon-Listings.`);
+            
+            if (confirmed) {
+                executeToolAction(toolName, toolNumber);
+            }
+        }
+
+        function executeToolAction(toolName, toolNumber) {
+            const actions = {
+                '1': () => simulateImageAnalysis(),
+                '2': () => simulateTitleGeneration(),
+                '3': () => simulateBulletpointGeneration(),
+                '4': () => simulateDescriptionGeneration(),
+                '5': () => simulateContentIdeas(),
+                '6': () => simulateCompetitorAnalysis(),
+                '7': () => simulateReviewSimulator(),
+                '8': () => simulateMarketingIdeas(),
+                '9': () => simulateAdsAnalysis(),
+                '10': () => simulateScalingStrategies(),
+                '11': () => simulateNicheAnalysis()
+            };
+            
+            const action = actions[toolNumber];
+            if (action) {
+                action();
+            }
+        }
+
+        // ===== TOOL SIMULATIONEN =====
+        function simulateImageAnalysis() {
+            showLoadingModal('Produktbilder werden analysiert...', 'Zyrix analysiert Klarheit, Vertrauen und Verkaufspsychologie');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Produktbild-Analyse', 'Deine Produktbilder wurden erfolgreich analysiert! Du erhältst konkrete Verbesserungsvorschläge für mehr Conversions.');
+            }, 3000);
+        }
+
+        function simulateTitleGeneration() {
+            showLoadingModal('Verkaufsstarke Titel werden erstellt...', 'Zyrix generiert emotional aufgeladene und suchstarke Titel');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Titel-Generator', 'Deine verkaufsstarken Titel sind bereit! Optimiert für Klicks und Conversions.');
+            }, 2500);
+        }
+
+        function simulateBulletpointGeneration() {
+            showLoadingModal('Bulletpoints werden generiert...', 'Zyrix erstellt nutzenorientierte und emotionale Bulletpoints');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Bulletpoint-Generator', 'Deine überzeugenden Bulletpoints sind fertig! Perfekt für Amazon optimiert.');
+            }, 2800);
+        }
+
+        function simulateDescriptionGeneration() {
+            showLoadingModal('Produktbeschreibung wird erstellt...', 'Zyrix schreibt conversionstarke Texte mit Storytelling');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Beschreibungs-Generator', 'Deine professionelle Produktbeschreibung ist bereit! Strukturiert und verkaufsstark.');
+            }, 3200);
+        }
+
+        function simulateContentIdeas() {
+            showLoadingModal('A+ Content Ideen werden generiert...', 'Zyrix entwickelt Struktur, Textbausteine und Bildideen');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('A+ Content Ideen', 'Deine A+ Content Strategie ist fertig! Klarer Aufbau für maximale Wirkung.');
+            }, 3500);
+        }
+
+        function simulateCompetitorAnalysis() {
+            showLoadingModal('Konkurrenzanalyse läuft...', 'Zyrix vergleicht deine Inhalte mit der Konkurrenz');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Konkurrenz-Analyse', 'Dein Stärken-/Schwächen-Profil ist fertig! Klare Empfehlungen zur Verbesserung.');
+            }, 4000);
+        }
+
+        function simulateReviewSimulator() {
+            showLoadingModal('Review-Simulation läuft...', 'Zyrix simuliert realistische Kundenreaktionen');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Review-Simulator', 'Deine Kritik-Prognose ist fertig! Vermeide teure Fehler vor dem Launch.');
+            }, 3800);
+        }
+
+        function simulateMarketingIdeas() {
+            showLoadingModal('Marketingstrategien werden entwickelt...', 'Zyrix erstellt individuelle Wachstumshebel');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Marketing-Strategien', 'Deine Marketingideen sind bereit! Sofort umsetzbare Wachstumshebel.');
+            }, 3600);
+        }
+
+        function simulateAdsAnalysis() {
+            showLoadingModal('Werbeanzeigen werden analysiert...', 'Zyrix analysiert Keyword-Performance und Optimierungspotenzial');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Ads-Analyse', 'Deine Werbeanzeigen-Analyse ist fertig! Konkrete Optimierungsempfehlungen verfügbar.');
+            }, 4200);
+        }
+
+        function simulateScalingStrategies() {
+            showLoadingModal('Skalierungsstrategien werden entwickelt...', 'Zyrix plant deine Hochskalierung Schritt für Schritt');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Skalierungs-Strategien', 'Deine Skalierungsstrategie ist bereit! Verdopple deine Sales systematisch.');
+            }, 4500);
+        }
+
+        function simulateNicheAnalysis() {
+            showLoadingModal('Nischenanalyse läuft...', 'Zyrix bewertet Marktpotenzial und Wettbewerbssituation');
+            setTimeout(() => {
+                hideLoadingModal();
+                showResultModal('Nischen-Analyse', 'Deine Potenzialbewertung ist fertig! Investiere nur in profitable Nischen.');
+            }, 4800);
+        }
+
+        function showPremiumModal() {
+            const modal = document.createElement('div');
+            modal.id = 'premium-modal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3>🔄 Hybrid-System: Abo + Tokens</h3>
+                    <p>Das perfekte System für Power-User:</p>
+                    <ul style="text-align: left; margin: 20px 0;">
+                        <li>📅 Monatsabo mit Basis-Tokens</li>
+                        <li>⚡ Flexible Zusatz-Tokens bei Bedarf</li>
+                        <li>💰 Planbare Kosten + Flexibilität</li>
+                        <li>🎯 Beste Balance für Vielnutzer</li>
+                    </ul>
+                    <button class="btn-primary" onclick="closePremiumModal()">Mehr erfahren</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            modal.querySelector('.close-modal').addEventListener('click', closePremiumModal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closePremiumModal();
+                }
+            });
+        }
+
+        function closePremiumModal() {
+            const modal = document.getElementById('premium-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // ===== MODAL SYSTEM =====
+        function showLoadingModal(title, message) {
+            const modal = document.createElement('div');
+            modal.id = 'loading-modal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="loading-spinner"></div>
+                    <h3>${title}</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+        }
+
+        function hideLoadingModal() {
+            const modal = document.getElementById('loading-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        function showResultModal(title, message) {
+            const modal = document.createElement('div');
+            modal.id = 'result-modal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h3>✅ ${title}</h3>
+                    <p>${message}</p>
+                    <button class="btn-primary" onclick="closeResultModal()">Verstanden</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            modal.querySelector('.close-modal').addEventListener('click', closeResultModal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeResultModal();
+                }
+            });
+        }
+
+        function closeResultModal() {
+            const modal = document.getElementById('result-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // ===== BENACHRICHTIGUNGSSYSTEM =====
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <span class="notification-message">${message}</span>
+                <span class="notification-close">&times;</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            notification.querySelector('.notification-close').addEventListener('click', function() {
+                removeNotification(notification);
+            });
+            
+            setTimeout(() => {
+                removeNotification(notification);
+            }, 4000);
+        }
+
+        function removeNotification(notification) {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+
+        console.log('🚀 Zyrix E-Commerce Tools Dashboard geladen - Version 3.0');
+    </script>
+</body>
+</html>
+
