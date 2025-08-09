@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Card - Cover Analyse & Konkurrenzvergleich für KDP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ZYRIX TOOL CARD DESIGN ===== */
+        :root {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2a2a2a;
+            --accent-color: #ff9500;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: #333333;
+            --success-color: #00ff88;
+            --card-bg: #252525;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Tool Card */
+        .tool-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-bg) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 149, 0, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, #ffaa00 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Header Section */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-color) 0%, #ffaa00 100%);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 10px 20px rgba(255, 149, 0, 0.3);
+            position: relative;
+        }
+
+        .icon-subtitle {
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--primary-bg);
+            margin-top: 2px;
+            text-align: center;
+            line-height: 1;
+            letter-spacing: 0.5px;
+        }
+
+        .token-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .token-badge {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 0 15px rgba(255, 149, 0, 0.3);
+            text-align: center;
+            min-width: 90px;
+            transition: all 0.3s ease;
+        }
+
+        .token-badge.primary {
+            font-size: 16px;
+            padding: 10px 20px;
+            border-width: 3px;
+        }
+
+        .token-badge:hover {
+            background: rgba(255, 149, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 149, 0, 0.5);
+        }
+
+        /* Content Section */
+        .card-content {
+            margin-bottom: 30px;
+        }
+
+        .tool-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .tool-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Features List */
+        .features-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .feature-check {
+            width: 20px;
+            height: 20px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--primary-bg);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Action Section */
+        .card-action {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #ffaa00 100%);
+            color: var(--primary-bg);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 149, 0, 0.3);
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 149, 0, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tool-card {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .tool-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 35px;
+            }
+
+            .tool-title {
+                font-size: 24px;
+                text-align: center;
+            }
+
+            .tool-description {
+                text-align: center;
+            }
+        }
+
+        /* Animation Effects */
+        .tool-card {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tool-icon {
+            animation: bounceIn 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .features-list li {
+            animation: fadeInLeft 0.5s ease-out both;
+        }
+
+        .features-list li:nth-child(1) { animation-delay: 0.5s; }
+        .features-list li:nth-child(2) { animation-delay: 0.6s; }
+        .features-list li:nth-child(3) { animation-delay: 0.7s; }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tool-card" onclick="openTool()">
+        <!-- Header Section -->
+        <div class="card-header">
+            <div class="tool-icon">
+                📚
+                <div class="icon-subtitle">Autoren • Verlage • KDP</div>
+            </div>
+            <div class="token-badges">
+                <div class="token-badge primary">120 TOKEN</div>
+                <div class="token-badge">150 TOKEN</div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="card-content">
+            <h2 class="tool-title">Cover Analyse & Konkurrenzvergleich</h2>
+            <p class="tool-description">
+                Analysiere dein KDP-Buchcover und vergleiche es direkt mit der Konkurrenz. 
+                Finde heraus, welches Cover am stärksten wirkt und warum.
+            </p>
+
+            <!-- Features List -->
+            <ul class="features-list">
+                <li>
+                    <div class="feature-check">✓</div>
+                    <span>KDP Cover-Analyse (120 Token)</span>
+                </li>
+                <li>
+                    <div class="feature-check">✓</div>
+                    <span>Konkurrenz-Vergleich (150 Token)</span>
+                </li>
+                <li>
+                    <div class="feature-check">✓</div>
+                    <span>Sofort umsetzbare Verbesserungsvorschläge</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Action Section -->
+        <div class="card-action">
+            <p class="action-text">Klicken zum Starten</p>
+            <button class="start-button" onclick="event.stopPropagation(); openTool();">
+                Tool öffnen
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ===== TOOL CARD JAVASCRIPT =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📚 Cover-Analyse Tool Card geladen');
+            
+            // Hover-Effekte für bessere Interaktion
+            const toolCard = document.querySelector('.tool-card');
+            const toolIcon = document.querySelector('.tool-icon');
+            
+            toolCard.addEventListener('mouseenter', function() {
+                toolIcon.style.transform = 'scale(1.1) rotate(5deg)';
+                toolIcon.style.transition = 'transform 0.3s ease';
+            });
+            
+            toolCard.addEventListener('mouseleave', function() {
+                toolIcon.style.transform = 'scale(1) rotate(0deg)';
+            });
+
+            // Token-Badge Animation
+            const tokenBadges = document.querySelectorAll('.token-badge');
+            tokenBadges.forEach(badge => {
+                badge.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                badge.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+
+        function openTool() {
+            // Cover-Analyse Tool öffnen
+            console.log('🚀 Cover-Analyse Tool wird geöffnet...');
+            
+            // Bestätigung mit Token-Kosten
+            const confirmed = confirm('Cover-Analyse & Konkurrenzvergleich für KDP öffnen?\n\nKosten:\n• Cover-Analyse: 120 Tokens\n• Konkurrenz-Vergleich: 150 Tokens (optional)\n\nDu wirst zur Tool-Seite weitergeleitet.');
+            
+            if (confirmed) {
+                try {
+                    // Speichere Tool-Auswahl und Token-Kosten
+                    localStorage.setItem('selectedTool', 'cover-analyse');
+                    localStorage.setItem('toolCostBasic', '120');
+                    localStorage.setItem('toolCostComparison', '150');
+                    localStorage.setItem('zyrixTokens', '500');
+                    localStorage.setItem('zyrixUser', 'Max Mustermann');
+                    
+                    console.log('✅ Daten gespeichert, Weiterleitung zu tool1...');
+                    
+                    // Interner relativer Link zu tool1.html
+                    window.location.href = 'tool1.html';
+                    
+                } catch (error) {
+                    console.error('❌ Fehler beim Öffnen des Tools:', error);
+                    alert('⚠️ Fehler beim Öffnen des Tools.\n\nFehler: ' + error.message);
+                }
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openTool();
+            }
+        });
+
+        console.log('📚 Cover-Analyse Tool Card JavaScript geladen');
+    </script>
+</body>
+</html>
+
