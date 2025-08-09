@@ -34,91 +34,6 @@
             padding: 0;
         }
 
-        /* Header */
-        .header {
-            background: var(--primary-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        .nav-breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .nav-breadcrumb a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        .nav-breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .token-display {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .token-count {
-            color: var(--success-color);
-            font-weight: 600;
-        }
-
-        .back-btn {
-            background: var(--secondary-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-btn:hover {
-            background: var(--accent-color);
-            color: var(--primary-bg);
-            transform: translateY(-2px);
-        }
-
         /* Dashboard Navigation */
         .dashboard-nav {
             background: var(--primary-bg);
@@ -172,13 +87,17 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
         /* Tool Header */
         .tool-header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-bg) 100%);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
         }
 
         .tool-icon {
@@ -188,66 +107,80 @@
         }
 
         .tool-title {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
             margin-bottom: 15px;
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .tool-subtitle {
             font-size: 18px;
             color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 30px;
             line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
         }
 
-        .tool-cost-info {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-            display: inline-block;
-        }
-
-        .cost-badge {
-            background: rgba(255, 149, 0, 0.2);
-            color: var(--accent-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            border: 1px solid var(--accent-color);
-        }
-
-        /* Tool Content */
-        .tool-content {
+        /* Services Grid */
+        .services-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 50px;
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
-        .upload-section, .analysis-section {
+        .service-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 15px;
             padding: 30px;
+            transition: all 0.3s ease;
         }
 
-        .section-title {
-            font-size: 24px;
-            font-weight: 600;
+        .service-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(255, 149, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+        }
+
+        .service-title {
+            font-size: 20px;
+            font-weight: 600;
             color: var(--text-primary);
+        }
+
+        .service-price {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .service-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
 
         .upload-area {
             border: 2px dashed var(--border-color);
             border-radius: 10px;
-            padding: 40px;
+            padding: 30px;
             text-align: center;
-            cursor: pointer;
             transition: all 0.3s ease;
+            cursor: pointer;
             margin-bottom: 20px;
         }
 
@@ -263,7 +196,6 @@
 
         .upload-icon {
             font-size: 48px;
-            color: var(--text-secondary);
             margin-bottom: 15px;
         }
 
@@ -272,18 +204,14 @@
             margin-bottom: 15px;
         }
 
-        .file-input {
-            display: none;
-        }
-
         .upload-btn {
             background: var(--accent-color);
             color: var(--primary-bg);
             border: none;
             padding: 12px 24px;
             border-radius: 25px;
-            cursor: pointer;
             font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
@@ -292,42 +220,62 @@
             transform: translateY(-2px);
         }
 
-        .analyze-btn {
-            background: var(--success-color);
-            color: var(--primary-bg);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            width: 100%;
+        .file-input {
+            display: none;
+        }
+
+        .image-preview {
             margin-top: 20px;
-            transition: all 0.3s ease;
-            disabled: true;
-        }
-
-        .analyze-btn:hover:not(:disabled) {
-            background: #00ff99;
-            transform: translateY(-2px);
-        }
-
-        .analyze-btn:disabled {
-            background: var(--border-color);
-            color: var(--text-secondary);
-            cursor: not-allowed;
+            text-align: center;
         }
 
         .preview-image {
-            max-width: 100%;
-            max-height: 200px;
+            max-width: 200px;
+            max-height: 300px;
             border-radius: 10px;
-            margin-top: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .analysis-result {
-            display: none;
-            margin-top: 20px;
+        .service-button {
+            width: 100%;
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .service-button:hover {
+            background: #ffaa00;
+            transform: translateY(-2px);
+        }
+
+        .service-button:disabled {
+            background: var(--border-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .results-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .result-card {
@@ -335,7 +283,7 @@
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .result-title {
@@ -352,7 +300,7 @@
         }
 
         .score-excellent { color: var(--success-color); }
-        .score-good { color: #ffaa00; }
+        .score-good { color: var(--accent-color); }
         .score-poor { color: var(--error-color); }
 
         .result-text {
@@ -360,33 +308,14 @@
             line-height: 1.6;
         }
 
-        .features-list {
-            list-style: none;
-            margin-top: 20px;
-        }
-
-        .features-list li {
-            color: var(--success-color);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .features-list li::before {
-            content: '✓';
-            font-weight: bold;
-        }
-
-        /* Loading Animation */
         .loading-spinner {
-            border: 4px solid var(--border-color);
-            border-radius: 50%;
-            border-top: 4px solid var(--accent-color);
             width: 40px;
             height: 40px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 0 auto 20px auto;
         }
 
         @keyframes spin {
@@ -394,21 +323,18 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
-            .tool-content {
+            .services-grid {
                 grid-template-columns: 1fr;
-                gap: 30px;
             }
             
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px;
-            }
-
             .tool-title {
-                font-size: 28px;
+                font-size: 24px;
+            }
+            
+            .service-card {
+                padding: 20px;
             }
         }
     </style>
@@ -429,37 +355,54 @@
             <span class="tool-icon">📚</span>
             <h1 class="tool-title">Cover analysieren & Konkurrenz vergleichen</h1>
             <p class="tool-subtitle">
-                Analysiere dein Buchcover und vergleiche es direkt mit der Konkurrenz. Finde heraus, welches Cover am stärksten wirkt und warum.
+                Wähle zwischen Cover-Analyse oder Konkurrenz-Vergleich. Beide Services können einzeln oder kombiniert genutzt werden.
             </p>
-            <div class="tool-cost-info">
-                <span class="cost-badge">Kosten: 10 Tokens</span>
-            </div>
         </section>
 
-        <!-- Tool Content -->
-        <section class="tool-content">
-            <!-- Upload Section -->
-            <div class="upload-section">
-                <h2 class="section-title">Dein Cover hochladen</h2>
+        <!-- Services Grid -->
+        <div class="services-grid">
+            <!-- Cover-Analyse Service -->
+            <div class="service-card">
+                <div class="service-header">
+                    <h3 class="service-title">🎨 Cover-Analyse</h3>
+                    <span class="service-price">120 TOKENS</span>
+                </div>
+                <p class="service-description">
+                    Detaillierte Analyse deines Covers mit Verbesserungsvorschlägen, Zielgruppen-Bewertung und Marktpositionierung.
+                </p>
                 
-                <div class="upload-area" id="upload-area">
+                <div class="upload-area" id="cover-upload-area">
                     <div class="upload-icon">📚</div>
                     <div class="upload-text">
-                        Ziehe dein Buchcover hierher oder klicke zum Auswählen
+                        Dein Buchcover hochladen
                     </div>
-                    <button class="upload-btn" onclick="document.getElementById('file-input').click()">
+                    <button class="upload-btn" onclick="document.getElementById('cover-file-input').click()">
                         Cover auswählen
                     </button>
-                    <input type="file" id="file-input" class="file-input" accept="image/*">
+                    <input type="file" id="cover-file-input" class="file-input" accept="image/*">
                 </div>
 
-                <div id="image-preview" style="text-align: center;"></div>
+                <div id="cover-preview" class="image-preview"></div>
 
-                <h3 style="margin-top: 30px; margin-bottom: 15px; color: var(--accent-color);">Konkurrenz-Cover (optional)</h3>
+                <button id="analyze-cover-btn" class="service-button" disabled>
+                    Cover analysieren (120 Tokens)
+                </button>
+            </div>
+
+            <!-- Konkurrenz-Vergleich Service -->
+            <div class="service-card">
+                <div class="service-header">
+                    <h3 class="service-title">⚔️ Konkurrenz-Vergleich</h3>
+                    <span class="service-price">150 TOKENS</span>
+                </div>
+                <p class="service-description">
+                    Vergleiche dein Cover mit bis zu 3 Konkurrenz-Covern und erhalte eine detaillierte Wettbewerbsanalyse.
+                </p>
+                
                 <div class="upload-area" id="competitor-upload-area">
                     <div class="upload-icon">🔍</div>
                     <div class="upload-text">
-                        Konkurrenz-Cover für direkten Vergleich
+                        Konkurrenz-Cover hochladen
                     </div>
                     <button class="upload-btn" onclick="document.getElementById('competitor-file-input').click()">
                         Konkurrenz-Cover auswählen
@@ -467,43 +410,30 @@
                     <input type="file" id="competitor-file-input" class="file-input" accept="image/*">
                 </div>
 
-                <div id="competitor-preview" style="text-align: center;"></div>
+                <div id="competitor-preview" class="image-preview"></div>
 
-                <ul class="features-list">
-                    <li>Cover-Design und Wirkung analysieren</li>
-                    <li>Direkter Konkurrenz-Vergleich</li>
-                    <li>Genre-spezifische Bewertung</li>
-                    <li>Verbesserungsvorschläge für mehr Sales</li>
-                </ul>
-            </div>
-
-            <!-- Analysis Section -->
-            <div class="analysis-section">
-                <h2 class="section-title">Cover-Analyse & Vergleich</h2>
-                
-                <div id="analysis-placeholder">
-                    <p style="color: var(--text-secondary); text-align: center; padding: 40px;">
-                        Lade dein Cover hoch, um die Analyse zu starten
-                    </p>
-                </div>
-
-                <div id="analysis-loading" style="display: none; text-align: center;">
-                    <div class="loading-spinner"></div>
-                    <p>Analysiere Cover-Design...</p>
-                    <p style="color: var(--text-secondary); font-size: 14px;">
-                        Zyrix AI bewertet Genre-Passgenauigkeit, Wirkung und Verkaufspotenzial
-                    </p>
-                </div>
-
-                <div id="analysis-result" class="analysis-result">
-                    <!-- Ergebnisse werden hier dynamisch eingefügt -->
-                </div>
-
-                <button id="analyze-btn" class="analyze-btn" disabled>
-                    Cover-Analyse starten (10 Tokens)
+                <button id="compare-btn" class="service-button" disabled>
+                    Konkurrenz vergleichen (150 Tokens)
                 </button>
             </div>
-        </section>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="results-section" style="display: none;">
+            <h2 class="results-title">Analyse-Ergebnisse</h2>
+            
+            <div id="loading-indicator" style="display: none; text-align: center;">
+                <div class="loading-spinner"></div>
+                <p>Analysiere Cover-Design...</p>
+                <p style="color: var(--text-secondary); font-size: 14px;">
+                    Zyrix AI bewertet Genre-Passgenauigkeit, Wirkung und Verkaufspotenzial
+                </p>
+            </div>
+
+            <div id="analysis-results">
+                <!-- Ergebnisse werden hier dynamisch eingefügt -->
+            </div>
+        </div>
     </main>
 
     <script>
@@ -517,176 +447,207 @@
 
         let uploadedCover = null;
         let competitorCover = null;
-        let currentTokens = 150;
+        let currentTokens = 1200; // Startwert für neue User
 
         function initializeTool() {
-            // Lade gespeicherte Daten
-            const savedTokens = localStorage.getItem('zyrixTokens');
-            const savedUser = localStorage.getItem('zyrixUser');
-            
-            if (savedTokens) {
-                currentTokens = parseInt(savedTokens);
-                updateTokenDisplay();
-            }
-            
-            console.log('Cover-Analyse Tool initialisiert');
-        }
-
-        function loadUserData() {
-            // Simuliere Benutzerdaten laden
-            updateTokenDisplay();
-        }
-
-        function updateTokenDisplay() {
-            const tokenElement = document.getElementById('token-count');
-            if (tokenElement) {
-                tokenElement.textContent = currentTokens;
-                
-                // Token-Farbe basierend auf Anzahl
-                if (currentTokens < 50) {
-                    tokenElement.style.color = 'var(--error-color)';
-                } else if (currentTokens < 100) {
-                    tokenElement.style.color = '#ffaa00';
-                } else {
-                    tokenElement.style.color = 'var(--success-color)';
-                }
-            }
+            // Tool-spezifische Initialisierung
+            console.log('Tool 1 initialisiert');
         }
 
         function setupEventListeners() {
-            const uploadArea = document.getElementById('upload-area');
+            // Cover-Upload
+            const coverInput = document.getElementById('cover-file-input');
+            const coverUploadArea = document.getElementById('cover-upload-area');
+            
+            coverInput.addEventListener('change', function(e) {
+                handleCoverUpload(e.target.files[0]);
+            });
+
+            // Drag & Drop für Cover
+            coverUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                coverUploadArea.classList.add('dragover');
+            });
+
+            coverUploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                coverUploadArea.classList.remove('dragover');
+            });
+
+            coverUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                coverUploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleCoverUpload(files[0]);
+                }
+            });
+
+            // Konkurrenz-Upload
+            const competitorInput = document.getElementById('competitor-file-input');
             const competitorUploadArea = document.getElementById('competitor-upload-area');
-            const fileInput = document.getElementById('file-input');
-            const competitorFileInput = document.getElementById('competitor-file-input');
-            const analyzeBtn = document.getElementById('analyze-btn');
+            
+            competitorInput.addEventListener('change', function(e) {
+                handleCompetitorUpload(e.target.files[0]);
+            });
 
-            // Main Cover Upload Events
-            uploadArea.addEventListener('click', () => fileInput.click());
-            uploadArea.addEventListener('dragover', handleDragOver);
-            uploadArea.addEventListener('dragleave', handleDragLeave);
-            uploadArea.addEventListener('drop', (e) => handleDrop(e, 'main'));
-            
-            fileInput.addEventListener('change', (e) => handleFileSelect(e, 'main'));
+            // Drag & Drop für Konkurrenz
+            competitorUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                competitorUploadArea.classList.add('dragover');
+            });
 
-            // Competitor Cover Upload Events
-            competitorUploadArea.addEventListener('click', () => competitorFileInput.click());
-            competitorUploadArea.addEventListener('dragover', handleDragOver);
-            competitorUploadArea.addEventListener('dragleave', handleDragLeave);
-            competitorUploadArea.addEventListener('drop', (e) => handleDrop(e, 'competitor'));
-            
-            competitorFileInput.addEventListener('change', (e) => handleFileSelect(e, 'competitor'));
-            
-            analyzeBtn.addEventListener('click', startAnalysis);
+            competitorUploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                competitorUploadArea.classList.remove('dragover');
+            });
+
+            competitorUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                competitorUploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleCompetitorUpload(files[0]);
+                }
+            });
+
+            // Service-Buttons
+            document.getElementById('analyze-cover-btn').addEventListener('click', startCoverAnalysis);
+            document.getElementById('compare-btn').addEventListener('click', startCompetitorComparison);
         }
 
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('dragover');
-        }
-
-        function handleDragLeave(e) {
-            e.currentTarget.classList.remove('dragover');
-        }
-
-        function handleDrop(e, type) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
-            
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFile(files[0], type);
+        function loadUserData() {
+            // Lade User-Daten aus localStorage (später Supabase)
+            const savedTokens = localStorage.getItem('zyrixTokens');
+            if (savedTokens) {
+                currentTokens = parseInt(savedTokens);
             }
+            console.log(`User hat ${currentTokens} Tokens`);
         }
 
-        function handleFileSelect(e, type) {
-            const file = e.target.files[0];
-            if (file) {
-                handleFile(file, type);
-            }
-        }
-
-        function handleFile(file, type) {
-            if (!file.type.startsWith('image/')) {
-                alert('Bitte wähle eine Bilddatei aus.');
-                return;
-            }
-
-            if (type === 'main') {
+        function handleCoverUpload(file) {
+            if (file && file.type.startsWith('image/')) {
                 uploadedCover = file;
-                showPreview(file, 'image-preview', 'Dein Cover');
-            } else {
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('cover-preview');
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Cover Preview" class="preview-image">
+                        <p style="margin-top: 10px; color: var(--success-color);">✓ Cover hochgeladen</p>
+                    `;
+                };
+                reader.readAsDataURL(file);
+                
+                // Button aktivieren
+                document.getElementById('analyze-cover-btn').disabled = false;
+                
+                console.log('Cover hochgeladen:', file.name);
+            }
+        }
+
+        function handleCompetitorUpload(file) {
+            if (file && file.type.startsWith('image/')) {
                 competitorCover = file;
-                showPreview(file, 'competitor-preview', 'Konkurrenz-Cover');
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('competitor-preview');
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Competitor Preview" class="preview-image">
+                        <p style="margin-top: 10px; color: var(--success-color);">✓ Konkurrenz-Cover hochgeladen</p>
+                    `;
+                };
+                reader.readAsDataURL(file);
+                
+                // Button aktivieren
+                document.getElementById('compare-btn').disabled = false;
+                
+                console.log('Konkurrenz-Cover hochgeladen:', file.name);
             }
-
-            // Analyse-Button aktivieren wenn Hauptcover hochgeladen
-            if (uploadedCover) {
-                const analyzeBtn = document.getElementById('analyze-btn');
-                analyzeBtn.disabled = false;
-            }
-            
-            console.log(`${type === 'main' ? 'Haupt' : 'Konkurrenz'}-Cover hochgeladen:`, file.name);
         }
 
-        function showPreview(file, containerId, label) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById(containerId);
-                preview.innerHTML = `
-                    <img src="${e.target.result}" alt="${label} Vorschau" class="preview-image">
-                    <p style="color: var(--success-color); margin-top: 10px;">
-                        ✓ ${label} erfolgreich hochgeladen: ${file.name}
-                    </p>
-                `;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function startAnalysis() {
+        function startCoverAnalysis() {
             if (!uploadedCover) {
                 alert('Bitte lade zuerst dein Cover hoch.');
                 return;
             }
 
-            if (currentTokens < 10) {
-                alert('Nicht genügend Tokens! Du benötigst 10 Tokens für diese Analyse.');
+            if (currentTokens < 120) {
+                alert('Nicht genügend Tokens! Du benötigst 120 Tokens für die Cover-Analyse.');
                 return;
             }
 
-            const hasCompetitor = competitorCover ? ' und Konkurrenz-Vergleich' : '';
-            const confirmed = confirm(`Cover-Analyse${hasCompetitor} starten?\n\nKosten: 10 Tokens\nVerbleibende Tokens: ${currentTokens - 10}`);
+            const confirmed = confirm(`Cover-Analyse starten?\n\nKosten: 120 Tokens\nVerbleibende Tokens: ${currentTokens - 120}`);
             
             if (confirmed) {
                 // Tokens abziehen
-                currentTokens -= 10;
+                currentTokens -= 120;
                 localStorage.setItem('zyrixTokens', currentTokens.toString());
-                updateTokenDisplay();
                 
                 // Analyse starten
-                showAnalysisLoading();
+                showAnalysisLoading('Cover-Analyse');
                 
                 // Simuliere Analyse-Zeit
                 setTimeout(() => {
-                    showAnalysisResults();
+                    showCoverAnalysisResults();
                 }, 4000);
             }
         }
 
-        function showAnalysisLoading() {
-            document.getElementById('analysis-placeholder').style.display = 'none';
-            document.getElementById('analysis-loading').style.display = 'block';
-            document.getElementById('analysis-result').style.display = 'none';
-            document.getElementById('analyze-btn').disabled = true;
+        function startCompetitorComparison() {
+            if (!competitorCover) {
+                alert('Bitte lade zuerst ein Konkurrenz-Cover hoch.');
+                return;
+            }
+
+            if (currentTokens < 150) {
+                alert('Nicht genügend Tokens! Du benötigst 150 Tokens für den Konkurrenz-Vergleich.');
+                return;
+            }
+
+            const confirmed = confirm(`Konkurrenz-Vergleich starten?\n\nKosten: 150 Tokens\nVerbleibende Tokens: ${currentTokens - 150}`);
+            
+            if (confirmed) {
+                // Tokens abziehen
+                currentTokens -= 150;
+                localStorage.setItem('zyrixTokens', currentTokens.toString());
+                
+                // Vergleich starten
+                showAnalysisLoading('Konkurrenz-Vergleich');
+                
+                // Simuliere Analyse-Zeit
+                setTimeout(() => {
+                    showCompetitorComparisonResults();
+                }, 5000);
+            }
         }
 
-        function showAnalysisResults() {
-            document.getElementById('analysis-loading').style.display = 'none';
-            document.getElementById('analysis-result').style.display = 'block';
+        function showAnalysisLoading(serviceType) {
+            const resultsSection = document.getElementById('results-section');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const analysisResults = document.getElementById('analysis-results');
+            
+            resultsSection.style.display = 'block';
+            loadingIndicator.style.display = 'block';
+            analysisResults.innerHTML = '';
+            
+            loadingIndicator.querySelector('p').textContent = `${serviceType} läuft...`;
+            
+            // Buttons deaktivieren
+            document.getElementById('analyze-cover-btn').disabled = true;
+            document.getElementById('compare-btn').disabled = true;
+        }
+
+        function showCoverAnalysisResults() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const analysisResults = document.getElementById('analysis-results');
+            
+            loadingIndicator.style.display = 'none';
             
             // Simuliere Cover-Analyse-Ergebnisse
             const results = generateCoverAnalysisResults();
             
-            const resultContainer = document.getElementById('analysis-result');
             let resultHTML = `
                 <div class="result-card">
                     <div class="result-title">Cover-Gesamtbewertung</div>
@@ -705,22 +666,7 @@
                     <div class="result-score ${results.sales.class}">${results.sales.score}/10</div>
                     <div class="result-text">${results.sales.text}</div>
                 </div>
-            `;
-
-            // Konkurrenz-Vergleich falls vorhanden
-            if (competitorCover) {
-                resultHTML += `
-                    <div class="result-card" style="border: 2px solid var(--accent-color);">
-                        <div class="result-title">🔥 Konkurrenz-Vergleich</div>
-                        <div class="result-text">
-                            <strong>${results.comparison.winner}</strong><br>
-                            ${results.comparison.reason}
-                        </div>
-                    </div>
-                `;
-            }
-
-            resultHTML += `
+                
                 <div class="result-card">
                     <div class="result-title">Verbesserungsvorschläge</div>
                     <div class="result-text">
@@ -731,13 +677,66 @@
                 </div>
             `;
             
-            resultContainer.innerHTML = resultHTML;
+            analysisResults.innerHTML = resultHTML;
             
-            // Analyse-Button wieder aktivieren
-            document.getElementById('analyze-btn').disabled = false;
-            document.getElementById('analyze-btn').textContent = 'Neue Cover-Analyse starten (10 Tokens)';
+            // Buttons wieder aktivieren
+            enableServiceButtons();
             
             console.log('Cover-Analyse abgeschlossen');
+        }
+
+        function showCompetitorComparisonResults() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const analysisResults = document.getElementById('analysis-results');
+            
+            loadingIndicator.style.display = 'none';
+            
+            // Simuliere Konkurrenz-Vergleich-Ergebnisse
+            const results = generateCompetitorComparisonResults();
+            
+            let resultHTML = `
+                <div class="result-card" style="border: 2px solid var(--accent-color);">
+                    <div class="result-title">🏆 Konkurrenz-Vergleich</div>
+                    <div class="result-text">
+                        <strong>${results.winner}</strong><br>
+                        ${results.reason}
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-title">Stärken-Analyse</div>
+                    <div class="result-text">
+                        <ul style="list-style: none; padding: 0;">
+                            ${results.strengths.map(item => `<li style="margin-bottom: 8px;">✓ ${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-title">Verbesserungspotenzial</div>
+                    <div class="result-text">
+                        <ul style="list-style: none; padding: 0;">
+                            ${results.improvements.map(item => `<li style="margin-bottom: 8px;">→ ${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            analysisResults.innerHTML = resultHTML;
+            
+            // Buttons wieder aktivieren
+            enableServiceButtons();
+            
+            console.log('Konkurrenz-Vergleich abgeschlossen');
+        }
+
+        function enableServiceButtons() {
+            if (uploadedCover) {
+                document.getElementById('analyze-cover-btn').disabled = false;
+            }
+            if (competitorCover) {
+                document.getElementById('compare-btn').disabled = false;
+            }
         }
 
         function generateCoverAnalysisResults() {
@@ -753,20 +752,13 @@
                 if (score >= 6) return 'score-good';
                 return 'score-poor';
             };
-            
+
             const improvements = [
                 'Titel-Schriftart für bessere Lesbarkeit optimieren',
                 'Farbkontrast erhöhen für stärkere Wirkung',
                 'Genre-typische Elemente verstärken',
                 'Thumbnail-Sichtbarkeit bei Amazon verbessern',
-                'Emotionale Wirkung durch Bildkomposition steigern',
-                'Zielgruppen-Ansprache durch Design-Elemente schärfen'
-            ];
-
-            const comparisonResults = [
-                { winner: 'Dein Cover gewinnt!', reason: 'Stärkere emotionale Wirkung und bessere Genre-Passgenauigkeit.' },
-                { winner: 'Konkurrenz-Cover ist stärker', reason: 'Professionellere Umsetzung und klarere Zielgruppen-Ansprache.' },
-                { winner: 'Beide Cover gleichwertig', reason: 'Unterschiedliche Stärken - dein Cover hat mehr Emotion, Konkurrenz bessere Technik.' }
+                'Emotionale Wirkung durch Bildkomposition steigern'
             ];
             
             return {
@@ -791,9 +783,33 @@
                         'Starke Verkaufswirkung - Cover weckt Kaufinteresse.' :
                         'Gute Verkaufswirkung, Potenzial für mehr Emotionen.'
                 },
-                comparison: competitorCover ? comparisonResults[Math.floor(Math.random() * comparisonResults.length)] : null,
                 improvements: improvements.slice(0, 3)
             };
+        }
+
+        function generateCompetitorComparisonResults() {
+            const comparisonResults = [
+                { 
+                    winner: 'Dein Cover gewinnt!', 
+                    reason: 'Stärkere emotionale Wirkung und bessere Genre-Passgenauigkeit.',
+                    strengths: ['Bessere Farbwahl', 'Klarere Typografie', 'Stärkere Emotionen'],
+                    improvements: ['Thumbnail-Optimierung', 'Kontrast verstärken']
+                },
+                { 
+                    winner: 'Konkurrenz-Cover ist stärker', 
+                    reason: 'Professionellere Umsetzung und klarere Zielgruppen-Ansprache.',
+                    strengths: ['Gute Grundidee', 'Passende Farbpalette'],
+                    improvements: ['Professionellere Typografie', 'Klarere Bildkomposition', 'Stärkere Genre-Signale']
+                },
+                { 
+                    winner: 'Beide Cover gleichwertig', 
+                    reason: 'Unterschiedliche Stärken - dein Cover hat mehr Emotion, Konkurrenz bessere Technik.',
+                    strengths: ['Emotionale Wirkung', 'Kreative Ansätze', 'Gute Grundstruktur'],
+                    improvements: ['Technische Umsetzung verbessern', 'Professionellere Details']
+                }
+            ];
+            
+            return comparisonResults[Math.floor(Math.random() * comparisonResults.length)];
         }
 
         // Error Handling
